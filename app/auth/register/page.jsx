@@ -290,6 +290,7 @@ const [isChecked, setIsChecked] = useState(false);
 
             {/* Register Button */}
             <button
+              disabled={isChecked}
               type="submit"
               className="w-full py-3 px-4 bg-blue-500 text-white rounded-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors"
             >

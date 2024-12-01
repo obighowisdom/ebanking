@@ -1,5 +1,5 @@
-import NavbarAndHero from '@/components/Dashboard/Banner';
-import WithdrawTable from '@/components/Dashboard/Withdraw';
+import NavbarAndHero from "../../../components/Dashboard/Banner";
+import WithdrawTable from "../../../components/Dashboard/Withdraw";
 
 import React from 'react'
 

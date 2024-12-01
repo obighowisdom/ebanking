@@ -1,5 +1,5 @@
-import NavbarAndHero from '@/components/Dashboard/Banner';
-import TransactionTable from '@/components/Dashboard/Table'
+import NavbarAndHero from '../../../components/Dashboard/Banner';
+import TransactionTable from "../../../components/Dashboard/Table";
 import React from 'react'
 
 const Deposit = () => {
