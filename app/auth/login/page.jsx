@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 
 
-const LoginPage = ({userData}) => {
+const LoginPage = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -27,13 +27,9 @@ const LoginPage = ({userData}) => {
   //           .post("http://localhost:3001/user", { withCredentials: true })
   //           .then((response) => {
   //             if (response.data.user) {
-  //               userData = response.data.user
   //               toast("Logged in Successfully");
-  //               router.push({
-  //                 pathname: "/dashboard",
-  //                 query: { data: userData }, // passing data as query parameters
-  //               });
-  //               console.log('userData', userData)
+  //               router.push('/dashboard');
+  //              
   //             }
   //           });
   //       } else {
