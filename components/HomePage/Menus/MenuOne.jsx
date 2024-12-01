@@ -1,5 +1,4 @@
 import { Mail, MessageSquare, UserPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { MdArrowDropDown } from "react-icons/md";
 import {
   DropdownMenu,
@@ -14,7 +13,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../../../components/ui/dropdown-menu";
 
 const MenuOne = () => {
   return (

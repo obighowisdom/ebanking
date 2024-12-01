@@ -1,14 +1,12 @@
-import Hero from '@/components/Hero/Hero'
-import BankingServices from '@/components/HomePage/Category'
-import BankingServiceCards from '@/components/HomePage/BankingServiceCard'
-import Choice from '@/components/HomePage/Choose'
-import Carousel from '@/components/HomePage/Choose'
-import { CarouselSize } from '@/components/HomePage/Options'
-import Missions from '@/components/HomePage/Missions'
-import FAQ from '@/components/HomePage/FAQ'
-import CTA from '@/components/HomePage/CTA'
-import Connect from '@/components/HomePage/Connect'
-import Footer from '@/components/HomePage/Footer'
+import Hero from '../../components/Hero/Hero'
+import BankingServices from '../../components/HomePage/Category'
+import BankingServiceCards from '../../components/HomePage/BankingServiceCard'
+import Choice from '../../components/HomePage/Choose'
+import Missions from '../../components/HomePage/Missions'
+import FAQ from '../../components/HomePage/FAQ'
+import CTA from '../../components/HomePage/CTA'
+import Connect from '../../components/HomePage/Connect'
+import Footer from '../../components/HomePage/Footer'
 
 const page = () => {
   return (

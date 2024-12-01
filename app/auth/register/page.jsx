@@ -27,7 +27,7 @@ const RegisterPage = () => {
   const [password, setPaassword] = useState("");
   const [role, setRole] = useState("user");
   const [status, setStatus] = useState("false");
-
+const [isChecked, setIsChecked] = useState(false);
 
   const router = useRouter()
 
@@ -80,7 +80,6 @@ const RegisterPage = () => {
 
       {/* Right side with registration form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center p-8 lg:p-3">
-       
         <div className="max-w-xl w-full mx-auto">
           <div className="mb-8">
             <img
@@ -132,7 +131,7 @@ const RegisterPage = () => {
               <div className="text-black bg-none">
                 <label
                   htmlFor="country"
-                  className="block text-sm font-medium mb-2"
+                  className="block text-sm font-medium mb-2 text-white"
                 >
                   Country <span className="text-red-500">*</span>
                 </label>
@@ -147,7 +146,7 @@ const RegisterPage = () => {
               <div className="text-black">
                 <label
                   htmlFor="country"
-                  className="block text-sm font-medium mb-2"
+                  className="block text-sm font-medium mb-2 text-white"
                 >
                   States <span className="text-red-500">*</span>
                 </label>
@@ -162,7 +161,7 @@ const RegisterPage = () => {
               <div className="text-black border-none">
                 <label
                   htmlFor="country"
-                  className="block text-sm font-medium mb-2"
+                  className="block text-sm font-medium mb-2 text-white"
                 >
                   City <span className="text-red-500">*</span>
                 </label>
@@ -268,6 +267,8 @@ const RegisterPage = () => {
               <input
                 type="checkbox"
                 id="terms"
+                checked={isChecked}
+                onChange={(e)=>setIsChecked(e.target.checked)}
                 className="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-800 text-blue-500 focus:ring-blue-500"
                 required
               />
