@@ -122,7 +122,7 @@ const LoginPage = ({userData}) => {
             </button>
 
             <p className="text-center text-sm text-slate-300">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <a
                 href="/auth/register"
                 className="text-blue-400 hover:text-blue-300"
