@@ -1,4 +1,4 @@
-import NavbarAndHero from "c../../../omponents/Dashboard/Banner";
+import NavbarAndHero from "../../../components/Dashboard/Banner";
 import LoadingComponent from "../../../components/Dashboard/Loaders/LoadingState";
 
 import React from "react";

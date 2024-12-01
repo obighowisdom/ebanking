@@ -1,6 +1,6 @@
 'use client'
-import { Button } from "@/components/ui/button";
-import SpinComponent from "@/components/ui/spinner";
+import { Button } from "../../../components/ui/button";
+import SpinComponent from "../../../components/ui/spinner";
 import React, { useState, useEffect } from "react";
 
 const LoadingComponent = ({title, percent, stop}) => {
