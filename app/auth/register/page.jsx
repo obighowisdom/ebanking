@@ -31,36 +31,36 @@ const [isChecked, setIsChecked] = useState(false);
 
   const router = useRouter()
 
-  const handleSignup = (e) => {
-    e.preventDefault();
-    axios
-      .post("http://localhost:3001/auth/register", {
-        countryid,
-        stateid,
-        cityid,
-        name,
-        email,
-        address,
-        date,
-        phone,
-        accountType,
-        password,
-        role,
-        status
-      })
-      .then((result) => {
-        if (result.status == 201) {
-          toast("Account created");
-          router.push('/auth/login')
-        }
-      }).catch(err => {
-        if (err.response && err.response.status === 400) {
-          toast("Email already exists. Use a different email");
-        } else {
-          console.log(err)
-        }
-      })
-  };
+  // const handleSignup = (e) => {
+  //   e.preventDefault();
+  //   axios
+  //     .post("http://localhost:3001/auth/register", {
+  //       countryid,
+  //       stateid,
+  //       cityid,
+  //       name,
+  //       email,
+  //       address,
+  //       date,
+  //       phone,
+  //       accountType,
+  //       password,
+  //       role,
+  //       status
+  //     })
+  //     .then((result) => {
+  //       if (result.status == 201) {
+  //         toast("Account created");
+  //         router.push('/auth/login')
+  //       }
+  //     }).catch(err => {
+  //       if (err.response && err.response.status === 400) {
+  //         toast("Email already exists. Use a different email");
+  //       } else {
+  //         console.log(err)
+  //       }
+  //     })
+  // };
 
   return (
     <div className="min-h-screen flex bg-slate-900 text-white">
@@ -92,7 +92,7 @@ const [isChecked, setIsChecked] = useState(false);
             </h2>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSignup}>
+          <form className="space-y-6">
             {/* First row: Username and Email */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>

@@ -13,35 +13,35 @@ const LoginPage = ({userData}) => {
 
   const router = useRouter();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    axios
-      .post(
-        "http://localhost:3001/auth/login",
-        { email, password },
-        { withCredentials: true }
-      )
-      .then((result) => {
-        if (result.data === "Success") {
-          axios
-            .post("http://localhost:3001/user", { withCredentials: true })
-            .then((response) => {
-              if (response.data.user) {
-                userData = response.data.user
-                toast("Logged in Successfully");
-                router.push({
-                  pathname: "/dashboard",
-                  query: { data: userData }, // passing data as query parameters
-                });
-                console.log('userData', userData)
-              }
-            });
-        } else {
-          toast("User does not exist");
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+  //   axios
+  //     .post(
+  //       "http://localhost:3001/auth/login",
+  //       { email, password },
+  //       { withCredentials: true }
+  //     )
+  //     .then((result) => {
+  //       if (result.data === "Success") {
+  //         axios
+  //           .post("http://localhost:3001/user", { withCredentials: true })
+  //           .then((response) => {
+  //             if (response.data.user) {
+  //               userData = response.data.user
+  //               toast("Logged in Successfully");
+  //               router.push({
+  //                 pathname: "/dashboard",
+  //                 query: { data: userData }, // passing data as query parameters
+  //               });
+  //               console.log('userData', userData)
+  //             }
+  //           });
+  //       } else {
+  //         toast("User does not exist");
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
   return (
     <div className="min-h-screen flex bg-slate-900 text-white">
       {/* Left side with image and welcome text */}
@@ -71,7 +71,7 @@ const LoginPage = ({userData}) => {
             <h2 className="text-2xl font-bold lg:hidden mb-4">Welcome Back!</h2>
           </div>
 
-          <form className="space-y-6" onSubmit={handleLogin}>
+          <form className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
                 Username or Email <span className="text-red-500">*</span>
