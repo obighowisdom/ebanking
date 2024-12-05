@@ -28,8 +28,8 @@ export function CarouselDemo() {
       <CarouselContent>
         {bankData.map((item, index) => (
           <CarouselItem key={index}>
-            <div className="p-6 flex justify-between">
-              <div className="flex w-[50%] flex-col justify-between gap-4 h-full">
+            <div className="p-6 flex justify-between flex-wrap">
+              <div className="flex md:w-[50%] md:mb-0 mb-4 w-full flex-col justify-between gap-4 h-full">
                 <h3 className="leading-[36px] font-semibold text-[26px] text-blue-900">
                   {item.title}
                 </h3>

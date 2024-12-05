@@ -2,15 +2,13 @@
 import React, { useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 
-
-const NavbarAndHero = ({title}) => {
+const NavbarAndHero = ({ title }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { label: "DASHBOARD", href: "/dashboard", active: true },
     { label: "DEPOSIT", href: "deposit" },
     { label: "WITHDRAW", href: "/withdraw" },
-    { label: "INVEST", href: "/invest" },
     { label: "LOAN", href: "/lan" },
     { label: "TRANSFER", href: "/transfer" },
     { label: "PROFILE", href: "/profile" },
@@ -46,7 +44,6 @@ const NavbarAndHero = ({title}) => {
                     transition-colors duration-200`}
                 >
                   {item.label}
-                  
                 </a>
               ))}
             </div>

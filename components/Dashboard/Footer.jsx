@@ -7,7 +7,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-900 text-white py-8">
+    <footer className="bg-slate-900 text-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         <div>
           <h3 className="text-lg font-bold mb-4">About Us</h3>
@@ -78,7 +78,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="mt-8 text-center text-sm">
-        <p>&copy; 2024 Ever Green Trustco. All Rights Reserved.</p>
+        <p>&copy; 2024 Nexa Banking. All Rights Reserved.</p>
       </div>
     </footer>
   );

@@ -2,10 +2,11 @@
 import React from "react";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Spin } from "antd";
 
 import {
   CitySelect,
@@ -15,6 +16,8 @@ import {
 import "react-country-state-city/dist/react-country-state-city.css";
 
 const RegisterPage = () => {
+  const [loading, setLoading] = useState(false);
+
   const [countryid, setCountryid] = useState(0);
   const [stateid, setstateid] = useState(0);
   const [cityid, setcityid] = useState(0);
@@ -24,43 +27,79 @@ const RegisterPage = () => {
   const [date, setDate] = useState(new Date());
   const [phone, setPhone] = useState("");
   const [accountType, setAccountType] = useState("");
-  const [password, setPaassword] = useState("");
+  const [accountNumber, setAccountNumber] = useState("Nil");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("user");
-  const [status, setStatus] = useState("false");
-const [isChecked, setIsChecked] = useState(false);
+  const [status, setStatus] = useState("pending");
+  const [isChecked, setIsChecked] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
-  // const handleSignup = (e) => {
-  //   e.preventDefault();
-  //   axios
-  //     .post("http://localhost:3001/auth/register", {
-  //       countryid,
-  //       stateid,
-  //       cityid,
-  //       name,
-  //       email,
-  //       address,
-  //       date,
-  //       phone,
-  //       accountType,
-  //       password,
-  //       role,
-  //       status
-  //     })
-  //     .then((result) => {
-  //       if (result.status == 201) {
-  //         toast("Account created");
-  //         router.push('/auth/login')
-  //       }
-  //     }).catch(err => {
-  //       if (err.response && err.response.status === 400) {
-  //         toast("Email already exists. Use a different email");
-  //       } else {
-  //         console.log(err)
-  //       }
-  //     })
-  // };
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (isChecked === false) {
+      toast.error("Accept the terms and conditions");
+      setLoading(false);
+
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Error confirming password");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const resUserExists = await fetch("/api/userExist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const { user } = await resUserExists.json();
+
+      if (user) {
+        toast.error("User already exists.");
+        setLoading(false);
+        return;
+      }
+
+      const res = await fetch("http://localhost:3000/api/register", {
+        cache: "no-store",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          address,
+          phone,
+          accountType,
+          accountNumber,
+          role,
+          status,
+        }),
+      });
+
+      if (res.ok) {
+        toast.success("registration successful, you are being re-directed");
+        router.push("/dashboard");
+        setLoading(false);
+      } else {
+        toast.error("registration failed. Try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error during registration: ", error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex bg-slate-900 text-white">
@@ -92,7 +131,7 @@ const [isChecked, setIsChecked] = useState(false);
             </h2>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={handleSignup} className="space-y-6">
             {/* First row: Username and Email */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
@@ -128,7 +167,7 @@ const [isChecked, setIsChecked] = useState(false);
             </div>
             {/* additional row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="text-black bg-none">
+              {/* <div className="text-black bg-none">
                 <label
                   htmlFor="country"
                   className="block text-sm font-medium mb-2 text-white"
@@ -142,8 +181,8 @@ const [isChecked, setIsChecked] = useState(false);
                   placeHolder="Select Country"
                   className="bg-none text-black border-none"
                 />
-              </div>
-              <div className="text-black">
+              </div> */}
+              {/* <div className="text-black">
                 <label
                   htmlFor="country"
                   className="block text-sm font-medium mb-2 text-white"
@@ -157,8 +196,8 @@ const [isChecked, setIsChecked] = useState(false);
                   }}
                   placeHolder="Select State"
                 />
-              </div>
-              <div className="text-black border-none">
+              </div> */}
+              {/* <div className="text-black border-none">
                 <label
                   htmlFor="country"
                   className="block text-sm font-medium mb-2 text-white"
@@ -173,7 +212,10 @@ const [isChecked, setIsChecked] = useState(false);
                   }}
                   placeHolder="Select City"
                 />
-              </div>
+              </div> */}
+            </div>
+            {/* Second row: Country and Mobile */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label
                   htmlFor="email"
@@ -189,10 +231,6 @@ const [isChecked, setIsChecked] = useState(false);
                   required
                 />
               </div>
-            </div>
-
-            {/* Second row: Country and Mobile */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="dob" className="block text-sm font-medium mb-2">
                   Date of Birth <span className="text-red-500">*</span>
@@ -215,7 +253,7 @@ const [isChecked, setIsChecked] = useState(false);
                 <div className="flex">
                   <span className="inline-flex items-center px-4 py-3 bg-slate-800 border border-r-0 border-slate-700 rounded-l-lg text-slate-400"></span>
                   <input
-                    type="tel"
+                    type="text"
                     id="mobile"
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-r-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -252,23 +290,36 @@ const [isChecked, setIsChecked] = useState(false);
                 <input
                   type="password"
                   id="password"
-                  onChange={(e) => setPaassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium mb-2"
+                >
+                  Confirm Password <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   required
                 />
               </div>
             </div>
-
             {/* Third row: Password and Confirm Password */}
             {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"></div> */}
-
             {/* Terms and Conditions */}
             <div className="flex items-start">
               <input
                 type="checkbox"
                 id="terms"
                 checked={isChecked}
-                onChange={(e)=>setIsChecked(e.target.checked)}
+                onChange={(e) => setIsChecked(e.target.checked)}
                 className="mt-1 w-4 h-4 rounded border-slate-700 bg-slate-800 text-blue-500 focus:ring-blue-500"
                 required
               />
@@ -287,16 +338,13 @@ const [isChecked, setIsChecked] = useState(false);
                 </a>
               </label>
             </div>
-
             {/* Register Button */}
             <button
-              disabled={isChecked}
               type="submit"
               className="w-full py-3 px-4 bg-blue-500 text-white rounded-sm font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors"
             >
-              Create Account
+              {loading === true ? <Spin /> : <>Create Account </>}
             </button>
-
             {/* Login Link */}
             <p className="text-center text-sm text-slate-300">
               Already have an account?{" "}

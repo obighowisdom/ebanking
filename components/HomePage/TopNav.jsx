@@ -10,14 +10,14 @@ const TopNav = () => {
         {/* Top bar */}
         <div className="py-2 text-sm flex gap-5 flex-wrap items-center">
           <h3 className='font-extrabold'>Need help? Contact Us</h3>
-          <div className="flex space-x-4">
+          <div className="flex space-x-2 md:space-x-4 flex-wrap">
             <div className="flex gap-2 items-center">
               <MdEmail color="#EF454D" size={20} />
               <a
                 href="mailto:contact@evergreentrustco.com"
                 className="hover:underline"
               >
-                contact@evergreentrustco.com
+                contact@nexabanking.com
               </a>
             </div>
 
