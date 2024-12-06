@@ -18,7 +18,7 @@ const BankingServices = () => {
     {
       title: "Bank Accounts",
       description:
-        "Discover the benefits of a bank account from Ever green trust co Bank.",
+        "Discover the benefits of a bank account from NexaBanking.",
       color: "bg-blue-800",
     },
     {

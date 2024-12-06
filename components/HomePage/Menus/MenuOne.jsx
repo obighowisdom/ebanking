@@ -1,5 +1,7 @@
 import { Mail, MessageSquare, UserPlus } from "lucide-react";
 import { MdArrowDropDown } from "react-icons/md";
+import { MdOutlineAccountBalanceWallet } from "react-icons/md";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +16,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
+import Link from "next/link";
 
 const MenuOne = () => {
   return (
@@ -41,21 +44,17 @@ const MenuOne = () => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem>
-                  <Mail className="mr-2 h-4 w-4" />
-                  <span>Current Account</span>
+                  <MdOutlineAccountBalanceWallet color='red' className="mr-2 h-4 w-4" />
+                  <Link href="/account/premier">Premier Account</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  <span>Savings Account</span>
+                  <MdOutlineAccountBalanceWallet className="mr-2 h-4 w-4" />
+                  <Link href="/account/student">Student Account</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  <span>Advance Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  <span>Bank Account</span>
-                </DropdownMenuItem>
+                {/* <DropdownMenuItem>
+                  <MdOutlineAccountBalanceWallet className="mr-2 h-4 w-4" />
+                  <span>Student Account</span>
+                </DropdownMenuItem> */}
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
@@ -63,7 +62,7 @@ const MenuOne = () => {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuGroup>
+        {/* <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <UserPlus className="mr-2 h-4 w-4" />
@@ -86,10 +85,10 @@ const MenuOne = () => {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
 
-        <DropdownMenuGroup>
+        {/* <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <UserPlus className="mr-2 h-4 w-4" />
@@ -116,7 +115,7 @@ const MenuOne = () => {
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

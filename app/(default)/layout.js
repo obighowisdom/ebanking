@@ -16,8 +16,10 @@ const geistMono = localFont({
 
 export const metadata = {
   title: "Nexa Banking Online",
-  description: "Seccured Banking Platform",
-  icon: '/images/nexa.png'
+  description: "Secured Banking Platform",
+  icons: {
+    icon: '/images/nexa.png'
+  }
 };
 
 export default function RootLayout({ children }) {

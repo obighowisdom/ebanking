@@ -16,11 +16,15 @@ const geistMono = localFont({
 export const metadata = {
   title: "Nexa Authentication",
   description: "Welcome to Nexa",
+  icons: {
+    icon: "/images/nexa.png",
+  },
 };
 
 export default function AuthLayout({ children }) {
   return (
     <html lang="en">
+      
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
