@@ -53,23 +53,23 @@ const RegisterPage = () => {
     }
 
     try {
-      const resUserExists = await fetch("/api/userExist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
+      // const resUserExists = await fetch("/api/userExist", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ email }),
+      // });
 
-      const { user } = await resUserExists.json();
+      // const { user } = await resUserExists.json();
 
-      if (user) {
-        toast.error("User already exists.");
-        setLoading(false);
-        return;
-      }
+      // if (user) {
+      //   toast.error("User already exists.");
+      //   setLoading(false);
+      //   return;
+      // }
 
-      const res = await fetch("http://localhost:3000/api/register", {
+      const res = await fetch("http://localhost:3000/api/auth/signup", {
         cache: "no-store",
         method: "POST",
         headers: {
@@ -87,10 +87,10 @@ const RegisterPage = () => {
           status,
         }),
       });
-
+      const data = res.json()
       if (res.ok) {
         toast.success("registration successful, you are being re-directed");
-        router.push("/dashboard");
+        router.push("/auth/login");
         setLoading(false);
       } else {
         toast.error("registration failed. Try again");
@@ -297,14 +297,14 @@ const RegisterPage = () => {
               </div>
               <div>
                 <label
-                  htmlFor="password"
+                  htmlFor="confirmpassword"
                   className="block text-sm font-medium mb-2"
                 >
                   Confirm Password <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="password"
-                  id="password"
+                  id="confirmpassword"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   required

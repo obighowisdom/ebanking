@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "lib/mongodb.js"  ],
+, "lib/mongodb.js", "app/api/auth/[...nextauth]/signup/route.js"  ],
   "exclude": [
     "node_modules"
   ]

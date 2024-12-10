@@ -9,43 +9,49 @@ import Header from "../../../components/HomePage/Header";
 
 const Data = [
   {
-    text: "£80 Amazon.co.uk Gift Card and 12 months of Prime Student when you open an Nexa Bank Student Account before 31 December 2018",
+    text: "Borrow from $500 to $5,000, The approved loan amount is subject to our assessment of your personal financial circumstances.",
   },
   {
-    text: "Guaranteed £1000 interest-free overdraft offer on account opening with the option to increase your overdraft as your studies progress",
+    text: " Flexible repayment terms. Choose how much you want to repay each month (minimum repayment applies) ",
   },
   {
-    text: "Representative example (assumed overdraft £1,000): 0% EAR variable",
+    text: `Redraw once you've repaid
+Once you've repaid your Flexiloan, you can redraw the credit if you need to - just like an overdraft`,
   },
   {
-    text: "Student Credit Card, up to £500 credit available. Subject to status and account conduct",
+    text: `Easy access
+Transfer all or a portion of the funds into your current account via online or telephone banking. You'll only pay for the portion of the loan that you transfer.`,
   },
   {
-    text: "Ever green trust co Bank Regular Saver with a great interest rate of 3% AER/gross up to £3000 fixed for 12 months",
+    text: "No set up fees. We won't charge you to setup your Flexiloan.",
   },
   {
-    text: "Student Credit Card, up to £500 credit available. Subject to status and account conduct",
+    text: "Only pay for what you use. If you don't use your Flexiloan, you don't pay anything.",
   },
 ];
 
 const page = () => {
   return (
     <div>
-           <Hamburger img="/images/loan.jpg" title='LOANS' text='Take the first step in applying for Loan' />
+      <Hamburger
+        img="/images/loan.jpg"
+        title="LOANS"
+        text="Take the first step in applying for Loan"
+      />
       <div className="flex items center justify-center my-9">
         <div className="flex md:flex-row flex-col rounded-md gap-6 shadow-lg p-4 md:w-[950px] w-full bg-white">
           <div className="md:w-[60%] w-full flex flex-col gap-4">
             <h5>Student account</h5>
             <h2 className="leading-{40px] text-[28px] text-blue-900 font-bold">
-              Nexa Banking Student Account
+              Nexa Banking Loans
             </h2>
-            <Image
+            {/* <Image
               src="/images/visa.png"
               height={50}
               width={150}
               alt="visa"
               className="w-fit h-fit my-3"
-            />
+            /> */}
             <h2>
               For students and apprentices, helping you with your finances:
             </h2>
@@ -62,7 +68,8 @@ const page = () => {
 
             <Button
               variant="destructive"
-              className="w-full rounded-sm bg-blue-950"
+                          className="w-full rounded-sm bg-blue-950"
+                          
             >
               Apply Now!!!
             </Button>

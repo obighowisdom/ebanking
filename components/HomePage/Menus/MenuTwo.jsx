@@ -1,5 +1,7 @@
+'use client'
 import { Mail, MessageSquare, UserPlus } from "lucide-react";
 import { MdArrowDropDown } from "react-icons/md";
+import { useRouter } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +15,15 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
+
 } from "../../../components/ui/dropdown-menu";
 
 const MenuTwo = () => {
+  const router = useRouter()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex flex-col gap-1 cursor-pointer">
+        <div onClick={()=>router.push('/loans')} className="flex flex-col gap-1 cursor-pointer">
           <div className="flex gap-2 items-center">
             <h1 className="font-extrabold text-[#033D75] text-[14px]">
               Borrowing
@@ -31,7 +35,7 @@ const MenuTwo = () => {
           </h5>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      {/* <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
@@ -136,7 +140,7 @@ const MenuTwo = () => {
             </DropdownMenuPortal>
           </DropdownMenuSub>
         </DropdownMenuGroup>
-      </DropdownMenuContent>
+      </DropdownMenuContent> */}
     </DropdownMenu>
   );
 };
