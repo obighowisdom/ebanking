@@ -53,7 +53,7 @@ const Register = () => {
 
     try {
       const resUserExists = await fetch(
-        "https://nexabanking.com/api/auth/userExists",
+        "https://www.nexabanking.com/api/auth/userExists",
         {
           method: "POST",
           headers: {
@@ -71,7 +71,7 @@ const Register = () => {
         return;
       }
 
-      const res = await fetch("https://nexabanking.com/api/auth/signup", {
+      const res = await fetch("https://www.nexabanking.com/api/auth/signup", {
         cache: "no-store",
         method: "POST",
         headers: {

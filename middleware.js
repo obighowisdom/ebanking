@@ -8,7 +8,7 @@ export async function middleware(req) {
     // Check if the route starts with "/user" and the user is not authenticated
     if (req.url.includes("/user") && !token) {
         // Redirect unauthenticated users to the login page
-        return NextResponse.redirect("http://localhost:3000/auth/login");
+        return NextResponse.redirect("https://www.nexabanking.com/auth/login");
     }
 
     // Allow the request to proceed for authenticated users
