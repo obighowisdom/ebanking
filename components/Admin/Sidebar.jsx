@@ -1,4 +1,4 @@
-"use client";
+// Sidebar.js
 
 import Image from "next/image";
 import Link from "next/link";
@@ -9,30 +9,28 @@ import { GrTransaction } from "react-icons/gr";
 import { MdOutlinePayments } from "react-icons/md";
 import { RiCoinsFill } from "react-icons/ri";
 import { GiMoneyStack } from "react-icons/gi";
-import { Button } from "../ui/button";
-import { signOut } from "next-auth/react";
 
 const Menu = [
   {
     menus: "Dashboard",
     icon: <MdDashboardCustomize color="gray" />,
-    url: "/user/home",
+    url: "/admin/home",
   },
   {
     menus: "Transactions",
     icon: <GrTransaction color="gray" />,
-    url: "/user/transaction",
+    url: "/admin/transaction",
   },
 
   {
     menus: "Investment",
     icon: <RiCoinsFill color="gray" />,
-    url: "/user/investment",
+    url: "/admin/investment",
   },
   {
     menus: "Loans",
     icon: <GiMoneyStack color="gray" />,
-    url: "/user/loans",
+    url: "/admin/loan",
   },
 ];
 
@@ -43,6 +41,7 @@ const Sidebar = ({ isOpen }) => {
         isOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0 z-40`}
     >
+    
       <div className="flex flex-col justify-between h-full ">
         <div className="mt-20 flex flex-col gap-3">
           {Menu.map((item, index) => {
@@ -62,7 +61,7 @@ const Sidebar = ({ isOpen }) => {
             );
           })}
         </div>
-        <div className="flex flex-col gap-3 mb-6">
+        {/* <div className="flex flex-col gap-3 mb-6">
           <div className="flex items-center rounded-xl gap-4 hover:bg-black hover:w-full hover:px-1">
             <IoSettingsOutline color="gray" />
             <Link
@@ -72,15 +71,16 @@ const Sidebar = ({ isOpen }) => {
               Settings & KYC
             </Link>
           </div>
-
-          <Button
-            onClick={() => signOut()}
-            className="flex text-start leading-[30px] text-gray-300 font-normal text-[16px] "
-          >
-            {/* <IoLogOut color="red" /> */}
-            Logout
-          </Button>
-        </div>
+          <div className="flex items-center rounded-xl gap-4 hover:bg-black hover:w-full hover:px-1">
+            <IoLogOut color="red" />
+            <Link
+              href={"#"}
+              className="leading-[30px] text-gray-300 font-normal text-[16px]"
+            >
+              Logout
+            </Link>
+          </div>
+        </div> */}
       </div>
     </div>
   );

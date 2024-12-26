@@ -25,7 +25,7 @@ const LoginPage = () => {
         password,
       });
       if (res?.ok) {
-        router.push("/dashboard");
+        router.push("/user/home");
         toast.success("login successful");
         setLoading(false);
       } else if (res?.status === 401) {

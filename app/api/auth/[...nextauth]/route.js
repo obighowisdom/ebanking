@@ -1,19 +1,19 @@
 import NextAuth from "next-auth";
 import User from "../../../../model/User";
-import {connectMongoDB} from "../../../../lib/mongodb";
+import { connectMongoDB } from "../../../../lib/mongodb";
 import CredentialsProvider from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 const bcrypt = require('bcrypt')
 
-const handler = NextAuth({
+export const authOptions = {
     session: {
         strategy: "jwt",
     },
     providers: [
 
         Github({
-            clientId: process.env.GITHUB_ID as string,
-            clientSecret: process.env.GITHUB_SECRET as string,
+            clientId: process.env.GITHUB_ID,
+            clientSecret: process.env.GITHUB_SECRET,
         }),
         CredentialsProvider({
             name: "Credentials",
@@ -29,7 +29,7 @@ const handler = NextAuth({
                         throw new Error("")
                     }
                     const isValidPassword = await bcrypt.compare(
-                        credentials?.password ?? "", user.password as string
+                        credentials?.password ?? "", user.password
                     );
                     if (!isValidPassword) {
                         throw new Error("")
@@ -84,5 +84,7 @@ const handler = NextAuth({
 
 
 
-});
+};
+const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };

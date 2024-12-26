@@ -10,18 +10,63 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    address: {
+    dob: {
       type: String,
-      required: true,
+
     },
     phone: {
       type: String,
       required: true,
     },
+    country: {
+      type: String,
+
+    },
+    state: {
+      type: String,
+
+    },
+    city: {
+      type: String,
+
+    },
+    zipcode: {
+      type: String,
+
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    landmark: {
+      type: String,
+
+    },
+    accountType: {
+      type: String,
+
+    },
+    accountNumber: {
+      type: String,
+
+    },
+    role: {
+      type: String,
+      default: 'user'
+
+    },
+    status: {
+      type: String,
+      default: 'pending'
+
+    },
     password: {
       type: String,
       required: true,
 
+    },
+    profileImage: {
+      type: String,
     },
   },
   { timestamps: true }

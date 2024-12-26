@@ -1,22 +1,64 @@
 "use client";
+
 import { useState } from "react";
 import { FiUpload } from "react-icons/fi";
+import { toast } from "react-toastify";
+import { Button } from "../../../../components/ui/button";
+import { Spin } from "antd";
 
-export default function Home() {
+
+export default function Home({ userId, setProfileImageUrl }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [cardFront, setCardFront] = useState(null);
   const [cardBack, setCardBack] = useState(null);
 
   const [ID, setID] = useState("");
   const [otherID, setOtherID] = useState("");
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // image upload
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
     if (file) {
+      setImage(file);
       setSelectedFile(URL.createObjectURL(file)); // Set the file preview
+    };
+  }
+
+  const handleUpload = async () => {
+    if (!image) return;
+
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("image", image);
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/profile",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.imageUrl) {
+        // Save the image URL to the user's profile (either state or database)
+        setProfileImageUrl(data.imageUrl); // Example: update profile image in state or pass to parent
+        toast.success("Profile image uploaded successfully");
+      } else {
+        toast.error("Failed to upload image");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Error uploading image");
+    } finally {
+      setLoading(false);
     }
   };
+
   //   front card upload
   const handlefront = (e) => {
     const front = e.target.files[0];
@@ -43,7 +85,7 @@ export default function Home() {
           </h2>
           <div>
             {/* image file */}
-            <div className="flex flex-col gap-4 items-center">
+            <div className="flex flex-col gap-2 items-center">
               {/* <h1 className="text-sm font-semibold text-center mb-6">
                 Upload Profile Image
               </h1> */}
@@ -67,22 +109,37 @@ export default function Home() {
               )}
 
               {/* Custom File Input with Upload Icon */}
-              <label
-                htmlFor="file-upload"
-                className="flex justify-center items-center cursor-pointer hover:bg-blue-100 transition duration-200"
-              >
-                <FiUpload className="text-blue-600 text-sm mr-2" />
-                <span className="text-blue-600">Upload Image</span>
-              </label>
+              <div className="flex gap-3 items-center">
+                <label
+                  htmlFor="file-upload"
+                  className="flex justify-center items-center cursor-pointer hover:bg-blue-100 transition duration-200"
+                >
+                  <FiUpload className="text-blue-600 text-sm mr-2" />
+                  <span className="text-blue-600">Upload Image</span>
+                </label>
 
-              {/* File Input */}
-              <input
-                id="file-upload"
-                type="file"
-                accept="image/jpeg, image/png, image/jpg"
-                className="hidden"
-                onChange={handleFileChange}
-              />
+                {/* File Input */}
+                <input
+                  name="image"
+                  id="file-upload"
+                  type="file"
+                  accept="image/jpeg, image/png, image/jpg"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+
+                {selectedFile ? (
+                  <Button
+                    onClick={handleUpload}
+                    disabled={loading}
+                    variant="secondary"
+                  >
+                    {loading ? (<Spin/>) : "Upload Image"}
+                  </Button>
+                ) : (
+                  <div className="mt-4"></div>
+                )}
+              </div>
             </div>
             {/* end uplaod */}
           </div>
@@ -91,7 +148,7 @@ export default function Home() {
               <h4 className="text-[18px] text-gray-700 font-bold ">
                 Personal Details
               </h4>
-              <div className="flex w-full gap-4">
+              <div className="flex md:flex-row flex-col w-full gap-4">
                 <div className="w-full">
                   <label className="block text-sm leading-[32px] font-semibold text-blue-950">
                     Full Name
@@ -113,7 +170,7 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <div className="flex w-full gap-4">
+              <div className="flex md:flex-row flex-col w-full gap-4">
                 <div className="w-full">
                   <label className="block text-sm leading-[32px] font-semibold text-blue-950">
                     Date of Birth
@@ -140,7 +197,7 @@ export default function Home() {
               <h4 className="text-[18px] text-gray-700 font-bold ">
                 Contact Details
               </h4>
-              <div className="flex w-full gap-4">
+              <div className="flex md:flex-row flex-col w-full gap-4">
                 <div className="w-full">
                   <label className="block text-sm leading-[32px] font-semibold text-blue-950">
                     Country
@@ -162,7 +219,7 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <div className="flex w-full gap-4">
+              <div className="flex md:flex-row flex-col w-full gap-4">
                 <div className="w-full">
                   <label className="block text-sm leading-[32px] font-semibold text-blue-950">
                     City
@@ -184,10 +241,10 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <div className="flex w-full gap-4">
+              <div className="flex md:flex-row flex-col w-full gap-4">
                 <div className="w-full">
                   <label className="block text-sm leading-[32px] font-semibold text-blue-950">
-                    Street Name
+                    Address
                   </label>
                   <input
                     type="text"
@@ -219,9 +276,12 @@ export default function Home() {
             <h4 className="text-[20px] text-center text-gray-700 font-extrabold ">
               KYC VERIFICATION
             </h4>
-            <div className="flex w-full gap-4">
+            <div className="flex md:flex-row flex-col w-full gap-4">
               <div className="flex flex-col gap-3 w-full">
-                <label htmlFor="">
+                <label
+                  htmlFor=""
+                  className="block text-sm leading-[32px] font-semibold text-blue-950"
+                >
                   Identity Card <b className="text-red-700">*</b>
                 </label>
                 <select
