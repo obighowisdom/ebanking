@@ -7,7 +7,7 @@ import { Button } from "../../../../components/ui/button";
 import { Spin } from "antd";
 
 
-export default function Home({ userId, setProfileImageUrl }) {
+export default function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [cardFront, setCardFront] = useState(null);
   const [cardBack, setCardBack] = useState(null);
@@ -25,39 +25,39 @@ export default function Home({ userId, setProfileImageUrl }) {
     };
   }
 
-  const handleUpload = async () => {
-    if (!image) return;
+  // const handleUpload = async () => {
+  //   if (!image) return;
 
-    setLoading(true);
+  //   setLoading(true);
 
-    const formData = new FormData();
-    formData.append("image", image);
+  //   const formData = new FormData();
+  //   formData.append("image", image);
 
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/profile",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+  //   try {
+  //     const response = await fetch(
+  //       "http://localhost:3000/api/profile",
+  //       {
+  //         method: "POST",
+  //         body: formData,
+  //       }
+  //     );
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (data.imageUrl) {
-        // Save the image URL to the user's profile (either state or database)
-        setProfileImageUrl(data.imageUrl); // Example: update profile image in state or pass to parent
-        toast.success("Profile image uploaded successfully");
-      } else {
-        toast.error("Failed to upload image");
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error("Error uploading image");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (data.imageUrl) {
+  //       // Save the image URL to the user's profile (either state or database)
+  //       setProfileImageUrl(data.imageUrl); // Example: update profile image in state or pass to parent
+  //       toast.success("Profile image uploaded successfully");
+  //     } else {
+  //       toast.error("Failed to upload image");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //     toast.error("Error uploading image");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   //   front card upload
   const handlefront = (e) => {
