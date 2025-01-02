@@ -17,7 +17,7 @@ const TopNav = () => {
                 href="mailto:contact@evergreentrustco.com"
                 className="hover:underline"
               >
-                contact@nexabanking.com
+                support@nexabanking.com
               </a>
             </div>
 
@@ -27,7 +27,7 @@ const TopNav = () => {
                 href="mailto:contact@evergreentrustco.com"
                 className="hover:underline"
               >
-                +1 (143) 2344 6675
+                +1 (425)2433460
               </a>
             </div>
           </div>

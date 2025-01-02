@@ -5,7 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 import { Spin } from "antd";
 import { countries } from "./Data/LinkData/Country";
 
@@ -32,6 +32,7 @@ const Register = () => {
   const [zipcode, setZipCode] = useState("");
   const [landmark, setLandmark] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  
 
   const router = useRouter();
 
@@ -94,6 +95,9 @@ const Register = () => {
           profileImage,
           role,
           status,
+          totalAmount: "00.0",
+          loan: "00.0",
+          uncleared: "00.0",
         }),
       });
       const data = res.json();
@@ -262,7 +266,7 @@ const Register = () => {
                   required
                 />
               </div>
-              <div className="text-black border-none">
+              <div className="text-white border-none">
                 <label
                   htmlFor="city"
                   className="block text-sm font-medium mb-2 text-white"

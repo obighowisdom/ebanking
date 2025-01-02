@@ -8,16 +8,18 @@ import MyLineChart from './Chart'
 const Data = [
   {
     name: "Total Balance",
-    amount: "2,890",
+    amount: "",
   },
   {
-    name: "Total Income",
-    amount: "578",
+    name: "Loan",
+    amount: "",
   },
   {
-    name: "Total Expense",
-    amount: "1,003",
+    name: "Uncleared",
+    amount: "",
   },
+  
+ 
 ];
 
 const Home = () => {

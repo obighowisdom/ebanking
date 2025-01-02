@@ -68,6 +68,16 @@ const userSchema = new Schema(
     profileImage: {
       type: String,
     },
+     totalAmount: {
+      type: String,
+    },
+    loan: {
+      type: String,
+    },
+    uncleared: {
+      type: String,
+    },
+     
   },
   { timestamps: true }
 );

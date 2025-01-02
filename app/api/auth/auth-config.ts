@@ -12,6 +12,7 @@ interface ExtendedSession {
         email: string | null;
         name: string | null;
         image: string | null;
+        
     };
 }
 
@@ -61,6 +62,7 @@ export const authOptions: NextAuthOptions = {
                         email: user.email,
                         name: user.name,
                     };
+                   
                 } catch (error) {
                     console.error("Authorization error:", error);
                     return null;
@@ -104,6 +106,7 @@ export const authOptions: NextAuthOptions = {
                     email: token.email,
                     name: token.name,
                     image: token.picture,
+                    
                 };
             };
             return session;

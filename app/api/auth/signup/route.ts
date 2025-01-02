@@ -22,7 +22,12 @@ export async function POST(request: Request) {
         accountNumber,
         profileImage,
         role,
-        status, } = await request.json();
+        status,
+        totalAmount,
+        loan,
+        uncleared,
+
+    } = await request.json();
 
     const isValidEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,6 +68,10 @@ export async function POST(request: Request) {
             profileImage,
             role,
             status,
+            totalAmount,
+            loan,
+            uncleared,
+
         });
         await newUser.save();
         return NextResponse.json({ message: "User created" }, { status: 201 });

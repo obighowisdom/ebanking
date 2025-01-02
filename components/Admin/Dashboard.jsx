@@ -1,6 +1,23 @@
 import React from "react";
 import UserTable from "./Table/UserTable";
 
+
+
+const getUsers = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/api/user", {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      throw new Error("Failed to get clients");
+    }
+    const data = await res.json();
+    return data.users
+    } catch (error) {
+    console.log("Error loading clients: ", error);
+  }
+};
+
 const users = [
   {
     id: 1,
@@ -32,12 +49,15 @@ const users = [
   },
 ];
 
-const Dashboard = () => {
+const Dashboard = async () => {
+  const data = await getUsers();
+  
+     
   return (
     <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
       {/* Charts and Tables Section */}
-      <UserTable data={users} />
+      <UserTable data={data} />
     </div>
   );
 };
