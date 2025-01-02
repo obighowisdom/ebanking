@@ -8,43 +8,12 @@ import Image from "next/image";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const transactions = [
-  {
-    name: "Alina K",
-    action: "Transfer",
-    amount: "+$128.00",
-    date: "Dec 17, 2022",
-    time: "13:33 PM",
-    status: "Success",
-    type: "Credit",
-    response: 'Processed'
-  },
-  {
-    name: "Alina K",
-    action: "Withdraw",
-    amount: "-$879.00",
-    date: "Dec 15, 2022",
-    time: "15:23 PM",
-    status: "Failed",
-    type: "Debit",
-    response: 'Unsuccessful'
-  },
-  {
-    name: "Alina K",
-    action: "Transfer",
-    amount: "+$1127.00",
-    date: "Dec 13, 2022",
-    time: "11:30 AM",
-    status: "Pending",
-    type: "Credit",
-    response: 'Processing'
-  },
-];
+const transactions = [];
 
 const TransactionTable = () => {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
 
   const downloadPDF = () => {
     const capture = document.querySelector(".actual-receipt");
@@ -73,85 +42,92 @@ const TransactionTable = () => {
             <tr></tr>
           </thead>
           <tbody className="w-full">
-            {transactions.map((transaction, index) => (
-              <tr
-                key={index}
-                className={`${
-                  index % 2 === 0 ? "bg-gray-700" : "bg-gray-800"
-                } hover:bg-gray-700`}
-              >
-                <td className="py-4">
-                  <div className="flex items-center h-full w-full">
-                    <div className="h-full w-full">
-                      {transaction.type === "Debit" ? (
-                        <LuBadgeMinus color="red" />
-                      ) : (
-                        <LuBadgePlus color="green" />
-                      )}
-                    </div>
-                    <div className="w-full">
-                      <h3 className="text-white font-bold md:text-[14px] text-[12px]">
-                        {transaction.name}
-                      </h3>
-                      <p className=" text-gray-500 font-bold text-[12px]">
-                        {transaction.action}
-                      </p>
-                    </div>
-                  </div>
-                  {/* {transaction.amount > 0 ? "+$" : "-$"}
+            {transactions.length === 0 ? (
+              <tr> <td className='text-center p-8 font-bold'>Data Not Available</td></tr>
+            ) : (
+              <>
+                {transactions?.map((transaction, index) => (
+                  <tr
+                    key={index}
+                    className={`${
+                      index % 2 === 0 ? "bg-gray-700" : "bg-gray-800"
+                    } hover:bg-gray-700`}
+                  >
+                    <td className="py-4">
+                      <div className="flex items-center h-full w-full">
+                        <div className="h-full w-full">
+                          {transaction.type === "Debit" ? (
+                            <LuBadgeMinus color="red" />
+                          ) : (
+                            <LuBadgePlus color="green" />
+                          )}
+                        </div>
+                        <div className="w-full">
+                          <h3 className="text-white font-bold md:text-[14px] text-[12px]">
+                            {transaction.name}
+                          </h3>
+                          <p className=" text-gray-500 font-bold text-[12px]">
+                            {transaction.action}
+                          </p>
+                        </div>
+                      </div>
+                      {/* {transaction.amount > 0 ? "+$" : "-$"}
                   {Math.abs(transaction.amount)} */}
-                </td>
-                <td className="py-4 px-3">
-                  <div>
-                    <h2
-                      style={{
-                        color: transaction.type === "Debit" ? "red" : "green",
-                      }}
-                      className=" font-bold text-[12px]"
+                    </td>
+                    <td className="py-4 px-3">
+                      <div>
+                        <h2
+                          style={{
+                            color:
+                              transaction.type === "Debit" ? "red" : "green",
+                          }}
+                          className=" font-bold text-[12px]"
+                        >
+                          {transaction.amount}
+                        </h2>
+                        <p className=" text-gray-500 font-bold text-[12px]">
+                          {transaction.type}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6 lg:block hidden">
+                      <div className="w-full">
+                        <h3 className="text-white font-bold text-[14px]">
+                          {transaction.date}
+                        </h3>
+                        <p className=" text-gray-500 font-bold text-[12px]">
+                          {transaction.time}
+                        </p>
+                      </div>
+                    </td>
+                    <td
+                      className={`py-4 px-3 font-bold text-[12px] ${
+                        transaction.status === "Success"
+                          ? "text-green-500"
+                          : transaction.status === "Pending"
+                          ? "text-yellow-500"
+                          : "text-[red]"
+                      }`}
                     >
-                      {transaction.amount}
-                    </h2>
-                    <p className=" text-gray-500 font-bold text-[12px]">
-                      {transaction.type}
-                    </p>
-                  </div>
-                </td>
-                <td className="py-4 px-6 lg:block hidden">
-                  <div className="w-full">
-                    <h3 className="text-white font-bold text-[14px]">
-                      {transaction.date}
-                    </h3>
-                    <p className=" text-gray-500 font-bold text-[12px]">
-                      {transaction.time}
-                    </p>
-                  </div>
-                </td>
-                <td
-                  className={`py-4 px-3 font-bold text-[12px] ${
-                    transaction.status === "Success"
-                      ? "text-green-500"
-                      : transaction.status === "Pending"
-                      ? "text-yellow-500"
-                      : "text-[red]"
-                  }`}
-                >
-                  {transaction.status}
-                </td>
-                <td>
-                  <div>
-                    <button
-                      onClick={() => {
-                        setData(transaction);
-                        setShowModal(true);
-                      }}
-                      className=" font-bold text-[12px] text-blue-700"
-                    >
-                      View
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                      {transaction.status}
+                    </td>
+                    <td>
+                      <div>
+                        <button
+                          onClick={() => {
+                            setData(transaction);
+                            setShowModal(true);
+                          }}
+                          className=" font-bold text-[12px] text-blue-700"
+                        >
+                          View
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </>
+            )}
           </tbody>
         </table>
       </div>
