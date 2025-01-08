@@ -3,8 +3,82 @@ import { FaPlus } from "react-icons/fa";
 import Image from "next/image";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useState } from "react";
+import { Spin } from "antd";
+import { toast } from "react-toastify";
+
 
 const Card = () => {
+  const [accountNumber, setAccountNumber] = useState('')
+  const [email, setEmail] = useState('')
+  const [residentialAddress, setResidentialAddress] = useState('')
+  const [cardType, setCardType] = useState('Master Card')
+  const [status, setStatus] = useState()
+  const [loading, setLoading]= useState(false)
+
+ const handleSignup = async (e) => {
+   e.preventDefault();
+   setLoading(true);
+
+   if (isChecked === false) {
+     toast.error("Accept the terms and conditions");
+     setLoading(false);
+
+     return;
+   }
+   if (password !== confirmPassword) {
+     toast.error("Error confirming password");
+     setLoading(false);
+     return;
+   }
+
+   try {
+     const resUserExists = await fetch(
+       "https://www.nexabanking.com/api/auth/userExists",
+       {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({ email }),
+       }
+     );
+
+     const { user } = await resUserExists.json();
+
+     if (user) {
+       toast.error("User already exists.");
+       setLoading(false);
+       return;
+     }
+
+     const res = await fetch("https://www.nexabanking.com/api/auth/signup", {
+       cache: "no-store",
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({
+         accountNumber,
+         email,
+         residentialAddress,
+         cardType,
+         status,
+                }),
+     });
+     const data = res.json();
+     if (res.ok) {
+       toast.success("Request Sent, you will be contacted through email");
+       router.push("/user/home");
+       setLoading(false);
+     } else {
+       toast.error("failed. Try again");
+       setLoading(false);
+     }
+   } catch (error) {
+     console.log("Error: ", error);
+   }
+ };
+
   const [showModal, setShowModal] = useState(false)
   return (
     <div className="w-full flex flex-col gap-5">
