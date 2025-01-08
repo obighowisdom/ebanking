@@ -19,7 +19,7 @@ const Register = () => {
   const [address, setAddress] = useState("");
   const [dob, setDob] = useState(new Date());
   const [phone, setPhone] = useState("");
-  const [accountType, setAccountType] = useState("");
+  const [accountType, setAccountType] = useState("Nil");
   const [accountNumber, setAccountNumber] = useState("Nil");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -72,34 +72,37 @@ const Register = () => {
         return;
       }
 
-      const res = await fetch("https://www.nexabanking.com/api/auth/signup", {
-        cache: "no-store",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          dob,
-          country,
-          state,
-          city,
-          zipcode,
-          landmark,
-          address,
-          phone,
-          accountType,
-          accountNumber,
-          profileImage,
-          role,
-          status,
-          totalAmount: "00.0",
-          loan: "00.0",
-          uncleared: "00.0",
-        }),
-      });
+      const res = await fetch(
+        "https://www.nexabanking.com/api/auth/signup",
+        {
+          cache: "no-store",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            dob,
+            country,
+            state,
+            city,
+            zipcode,
+            landmark,
+            address,
+            phone,
+            accountType,
+            accountNumber,
+            profileImage,
+            role,
+            status,
+            totalAmount: "00.0",
+            loan: "00.0",
+            uncleared: "00.0",
+          }),
+        }
+      );
       const data = res.json();
       if (res.ok) {
         toast.success("registration successful, you are being re-directed");

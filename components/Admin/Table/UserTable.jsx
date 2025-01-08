@@ -4,18 +4,88 @@ import { Button } from "../../ui/button";
 import { FiSearch } from "react-icons/fi";
 import { useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
+import { toast } from "react-toastify";
+import { Spin } from "antd";
+import { useRouter } from "next/navigation";
 
 const UserTable = ({ data }) => {
   const [modal, setModal] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [accountNumber, setAccountNumber] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // updateuser data
+  const [role, setRole] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
+  const [uncleared, setUncleared] = useState("");
+  const [loan, setLoan] = useState("");
+  const [accountType, setAccountType] = useState("");
+  const [status, setStatus] = useState("");
+
+  const userId = userData?._id;
+  const router = useRouter()
+
+  // generate account number
+  const generateAccountNumber = (e) => {
+    e.preventDefault();
+    let accountNum = "";
+
+    for (let i = 0; i < 10; i++) {
+      accountNum += Math.floor(Math.random() * 10); // Generates a random digit (0-9)
+    }
+
+    setAccountNumber(accountNum); // Set the generated account number
+  };
+
+  // Update Users
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        `https://www.nexabanking.com/api/updateUser/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            role,
+            totalAmount,
+            uncleared,
+            accountNumber,
+            accountType,
+            loan,
+            status,
+          }),
+        }
+      );
+      console.log('res', res)
+      if (res.status === 200) {
+        toast.success("User Updated");
+        router.refresh()
+        router.push("/admin/home");
+        setLoading(false);
+      } else {
+        toast.error("failed. Try again");
+        setLoading(false);
+      }
+
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full bg-white px-10 rounded-lg">
       <div className="flex w-full md:flex-row flex-col items-center justify-end md:gap-6 gap-1 my-2">
         <Button
           variant="destructive"
           className="px-14 py-6 rounded-sm my-6 bg-[#14233C]"
-          onClick={() => setModal(true)}
         >
-          Add Users
+          Users
         </Button>
         <div className="flex border-red-600 rounded-sm">
           <div className="border justify-center items-center rounded-md h-fit">
@@ -138,9 +208,15 @@ const UserTable = ({ data }) => {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap flex gap-4 text-right text-sm font-medium">
-                      <a href="#" className="text-gray-400">
+                      <button
+                        className="text-gray-400"
+                        onClick={() => {
+                          setModal(true);
+                          setUserData(row);
+                        }}
+                      >
                         <FaEdit />
-                      </a>
+                      </button>
                       <a href="#" className="text-gray-400">
                         <FaTrash />
                       </a>
@@ -178,6 +254,8 @@ const UserTable = ({ data }) => {
                     Name:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.name}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="name"
@@ -188,6 +266,8 @@ const UserTable = ({ data }) => {
                     Email:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.email}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="email"
                     id="emal"
@@ -198,6 +278,8 @@ const UserTable = ({ data }) => {
                     Phone Number:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.phone}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="number"
                     id="number"
@@ -211,6 +293,8 @@ const UserTable = ({ data }) => {
                     Country:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.country}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="country"
@@ -221,6 +305,8 @@ const UserTable = ({ data }) => {
                     State:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.state}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="state"
@@ -231,16 +317,37 @@ const UserTable = ({ data }) => {
                     City:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.city}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="city"
                   />
                 </div>
+
+                <div className="flex flex-col gap-2 w-full">
+                  <label className="font-bold" htmlFor="status">
+                    Role:
+                  </label>
+                  <select
+                    id="status"
+                    className="p-2 border rounded focus:shadow focus:shadow-blue-700"
+                    required
+                    onChange={(e) => setRole(e.target.value)}
+                  >
+                    <option value={userData?.role}>{userData?.role}</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                  </select>
+                </div>
+
                 <div className="flex flex-col gap-2 w-full">
                   <label className="font-bold" htmlFor="zip">
                     Zip Code:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.zipcode}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="zip"
@@ -255,12 +362,67 @@ const UserTable = ({ data }) => {
                     Address:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?.address}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="address"
                   />
                 </div>
+                <div className="flex flex-col gap-2 w-full">
+                  <label className="font-bold" htmlFor="landmark">
+                    Landmark:
+                  </label>
+                  <input
+                    disabled
+                    defaultValue={userData?.landmark}
+                    className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
+                    type="text"
+                    id="landmark"
+                  />
+                </div>
               </div>
+
+              <div className="w-full flex gap-4 lg:flex-row flex-col ">
+                <div className="flex flex-col gap-2 w-full">
+                  <label className="font-bold" htmlFor="address">
+                    Total Amount:
+                  </label>
+                  <input
+                    defaultValue={userData?.totalAmount}
+                    className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
+                    type="text"
+                    id="address"
+                    onChange={(e) => setTotalAmount(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2 w-full">
+                  <label className="font-bold" htmlFor="landmark">
+                    Uncleared:
+                  </label>
+                  <input
+                    defaultValue={userData?.uncleared}
+                    className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
+                    type="text"
+                    id="landmark"
+                    onChange={(e) => setUncleared(e.target.value)}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2 w-full">
+                  <label className="font-bold" htmlFor="landmark">
+                    Loan:
+                  </label>
+                  <input
+                    defaultValue={userData?.loan}
+                    className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
+                    type="text"
+                    id="landmark"
+                    onChange={(e) => setLoan(e.target.value)}
+                  />
+                </div>
+              </div>
+
               {/* last row */}
               <div className="w-full flex gap-4 lg:flex-row flex-col ">
                 <div className="flex flex-col gap-2 w-full">
@@ -268,20 +430,50 @@ const UserTable = ({ data }) => {
                     User ID:
                   </label>
                   <input
+                    disabled
+                    defaultValue={userData?._id}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="id"
                   />
                 </div>
+                <div className="flex flex-col gap-1 w-full">
+                  <div className="flex flex-col gap-2 w-full">
+                    <label className="font-bold" htmlFor="accountNumber">
+                      Account Number:
+                    </label>
+                    <input
+                      defaultValue={accountNumber}
+                      disabled
+                      className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
+                      type="text"
+                      id="accountNumber"
+                    />
+                  </div>
+                  <button
+                    className="bg-gray-300 p-2 w-fit rounded"
+                    onClick={generateAccountNumber}
+                  >
+                    generate
+                  </button>
+                </div>
+
                 <div className="flex flex-col gap-2 w-full">
-                  <label className="font-bold" htmlFor="accountNumber">
-                    Account Number:
+                  <label className="font-bold" htmlFor="status">
+                    Account Type:
                   </label>
-                  <input
-                    className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
-                    type="number"
-                    id="accountNumber"
-                  />
+                  <select
+                    id="accountType"
+                    className="p-2 border rounded focus:shadow focus:shadow-blue-700"
+                    required
+                    onChange={(e) => setAccountType(e.target.value)}
+                  >
+                    <option value={userData?.accountType}>
+                      {userData?.accountType}
+                    </option>
+                    <option value="Approved">Regular</option>
+                    <option value="Not Approved">Premium</option>
+                  </select>
                 </div>
 
                 <div className="flex flex-col gap-2 w-full">
@@ -292,8 +484,9 @@ const UserTable = ({ data }) => {
                     id="status"
                     className="p-2 border rounded focus:shadow focus:shadow-blue-700"
                     required
+                    onChange={(e) => setStatus(e.target.value)}
                   >
-                    <option value="Pending">Pending</option>
+                    <option value={userData?.status}>{userData?.status}</option>
                     <option value="Approved">Approved</option>
                     <option value="Not Approved">Not Approved</option>
                   </select>
@@ -301,15 +494,17 @@ const UserTable = ({ data }) => {
               </div>
               <div className="w-full flex gap-4">
                 <Button
+                  disabled={loading}
                   variant="destructive"
                   className="px-14 py-6 rounded-sm my-6 w-full md:w-fit bg-[#14233C]"
+                  onClick={handleSubmit}
                 >
-                  Update Users
+                  {!loading ? "Update User" : <Spin />}
                 </Button>
                 <Button
                   variant="destructive"
                   className="px-14 py-6 rounded-sm my-6 w-full md:w-fit bg-[#9c2d1e]"
-                  onClick={() => setModal(true)}
+                  onClick={() => setModal(false)}
                 >
                   Cancel
                 </Button>

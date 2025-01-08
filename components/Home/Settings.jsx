@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
 import { toast } from "react-toastify";
-import { Button } from "../../components/ui/button";
 import { Spin } from "antd";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import ProfileImage from "./ProfileImage";
 
 export default function Settings({ userData }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -31,19 +31,6 @@ export default function Settings({ userData }) {
     setCurrentUser(currentUser); // Set the matched user in the state
   }, [userData, session]);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImage(file);
-      setSelectedFile(URL.createObjectURL(file)); // Set the file preview
-    }
-  };
-
-  // handle profile image
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    toast.error('services busy!!!')
-  };
 
   // const handleUpload = async () => {
   //   if (!image) return;
@@ -104,66 +91,7 @@ export default function Settings({ userData }) {
           <h2 className="text-sm font-semibold mb-2 uppercase text-center">
             Profile Settings
           </h2>
-          <div>
-            {/* image file */}
-            <div className="flex flex-col gap-2 items-center">
-              {/* <h1 className="text-sm font-semibold text-center mb-6">
-                Upload Profile Image
-              </h1> */}
-              {/* Image Preview */}
-              {selectedFile ? (
-                <div className="mt-4">
-                  <img
-                    src={selectedFile}
-                    alt="Preview"
-                    className="w-48 h-48 object-cover rounded-full border border-blue-500"
-                  />
-                </div>
-              ) : (
-                <div className="mt-4">
-                  <img
-                    src="/images/user.jpg"
-                    alt="Preview"
-                    className="w-40 h-40 object-cover rounded-full"
-                  />
-                </div>
-              )}
-
-              {/* Custom File Input with Upload Icon */}
-              <div className="flex gap-3 items-center">
-                <label
-                  htmlFor="file-upload"
-                  className="flex justify-center items-center cursor-pointer hover:bg-blue-100 transition duration-200"
-                >
-                  <FiUpload className="text-blue-600 text-sm mr-2" />
-                  <span className="text-blue-600">Upload Image</span>
-                </label>
-
-                {/* File Input */}
-                <input
-                  name="image"
-                  id="file-upload"
-                  type="file"
-                  accept="image/jpeg, image/png, image/jpg"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-
-                {selectedFile ? (
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    variant="secondary"
-                  >
-                    {loading ? <Spin /> : "Upload Image"}
-                  </Button>
-                ) : (
-                  <div className="mt-4"></div>
-                )}
-              </div>
-            </div>
-            {/* end uplaod */}
-          </div>
+          <ProfileImage />
 
           {currentUser ? (
             <div className="space-y-4">
