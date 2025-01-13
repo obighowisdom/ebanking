@@ -5,81 +5,63 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { useState } from "react";
 import { Spin } from "antd";
 import { toast } from "react-toastify";
-
+import { useRouter } from "next/navigation";
 
 const Card = () => {
-  const [accountNumber, setAccountNumber] = useState('')
-  const [email, setEmail] = useState('')
-  const [residentialAddress, setResidentialAddress] = useState('')
-  const [cardType, setCardType] = useState('Master Card')
-  const [status, setStatus] = useState()
-  const [loading, setLoading]= useState(false)
+  const [accountNumber, setAccountNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [residentialAddress, setResidentialAddress] = useState("");
+  const [cardType, setCardType] = useState("Master Card");
+  const [status, setStatus] = useState("Pending");
+  const [loading, setLoading] = useState(false);
 
- const handleSignup = async (e) => {
-   e.preventDefault();
-   setLoading(true);
+  const router = useRouter()
 
-   if (isChecked === false) {
-     toast.error("Accept the terms and conditions");
-     setLoading(false);
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-     return;
-   }
-   if (password !== confirmPassword) {
-     toast.error("Error confirming password");
-     setLoading(false);
-     return;
-   }
-
-   try {
-     const resUserExists = await fetch(
-       "https://www.nexabanking.com/api/auth/userExists",
-       {
-         method: "POST",
-         headers: {
-           "Content-Type": "application/json",
-         },
-         body: JSON.stringify({ email }),
-       }
-     );
-
-     const { user } = await resUserExists.json();
-
-     if (user) {
-       toast.error("User already exists.");
+    if (accountNumber === '') {
+      toast.error("Please enter account number");
+      setLoading(false);
+      return;
+    }
+     if (email === "") {
+       toast.error("Please enter your email");
        setLoading(false);
        return;
      }
 
-     const res = await fetch("https://www.nexabanking.com/api/auth/signup", {
-       cache: "no-store",
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-       },
-       body: JSON.stringify({
-         accountNumber,
-         email,
-         residentialAddress,
-         cardType,
-         status,
-                }),
-     });
-     const data = res.json();
-     if (res.ok) {
-       toast.success("Request Sent, you will be contacted through email");
-       router.push("/user/home");
-       setLoading(false);
-     } else {
-       toast.error("failed. Try again");
-       setLoading(false);
-     }
-   } catch (error) {
-     console.log("Error: ", error);
-   }
- };
+    try {
+      const res = await fetch("http://localhost:3000/api/atm", {
+        cache: "no-store",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accountNumber,
+          email,
+          residentialAddress,
+          cardType,
+          status,
+        }),
+      });
+      const data = res.json();
+      if (res.ok) {
+        setLoading(false);
+        router.push("/user/home");
+        toast.success("Request Sent, you will be contacted through email");
+      } else {
+        toast.error("failed. Try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="w-full flex flex-col gap-5">
       <div>
@@ -143,8 +125,9 @@ const Card = () => {
               <input
                 className="w-full border p-2 rounded-md focus-within:shadow-md focus:shadow-blue-900 outline-none"
                 id="number"
-                type="text"
+                type="number"
                 required
+                onChange={(e) => setAccountNumber(e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-3 w-full">
@@ -158,7 +141,8 @@ const Card = () => {
                 required
                 className="w-full border p-2 rounded-md focus-within:shadow-md focus:shadow-blue-900 outline-none"
                 id="email"
-                type="text"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-3 w-full">
@@ -173,6 +157,7 @@ const Card = () => {
                 className="w-full border p-2 rounded-md focus-within:shadow-md focus:shadow-blue-900 outline-none"
                 id="address"
                 type="text"
+                onChange={(e) => setResidentialAddress(e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-3 w-full">
@@ -191,8 +176,12 @@ const Card = () => {
                 value="Master Card"
               />
             </div>
-            <button className="w-full mt-4 p-3 rounded bg-blue-900 flex items-center justify-center hover:bg-slate-600 text-white font-semibold">
-              Request
+            <button
+              type="submit"
+              onClick={handleSignup}
+              className="w-full mt-4 p-3 rounded bg-blue-900 flex items-center justify-center hover:bg-slate-600 text-white font-semibold"
+            >
+              {loading ? <Spin /> : "Request"}
             </button>
           </form>
         </div>

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { FiUpload } from "react-icons/fi";
 import { Button } from "../../components/ui/button";
+import { Spin } from "antd";
+
 
 
 const ProfileImage = () => {

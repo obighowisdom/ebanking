@@ -30,29 +30,23 @@ export function TabsDemo() {
   const [otherCountry, setOtherCountry] = useState("");
   const router = useRouter();
 
-
   const [modal, setModal] = useState(false);
 
   const [bankName, setBankName] = useState("");
+  const [email, setEmail] = useState("");
   const [accountNumber, setAccountNumber] = useState("Nil");
   const [accountName, setAccountName] = useState("");
   const [amount, setAmount] = useState("");
   
-  const [wAccountNumber, setWAccountNumber] = useState('')
+  const [wAccountNumber, setWAccountNumber] = useState("");
   const [method, setMethod] = useState("");
   const [wemail, setWemail] = useState("");
 
-  
-  const handleCot = (e) => {
+  const handleCot = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     if (bankName === "") {
-      toast.error("Invalid Bankname");
-      setLoading(false);
-      return;
-    }
-    if (bankName === "others") {
       toast.error("Invalid Bankname");
       setLoading(false);
       return;
@@ -78,33 +72,123 @@ export function TabsDemo() {
       setLoading(false);
       return;
     }
-    router.push("/user/cot");
+    // function transfer here
+    try {
+      const res = await fetch("http://localhost:3000/api/transfer", {
+        cache: "no-store",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          bankName,
+          accountNumber,
+          accountName,
+          amount,
+          transactionType: 'Transfer',
+          status: 'Pending'
+
+        }),
+      });
+      const data = res.json();
+      if (res.ok) {
+        setLoading(false);
+        router.push("/user/cot");
+        toast.success("Request processing");
+      } else {
+        toast.error("failed. Try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  // withdraw function
+  const withdraw = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (bankName === "") {
+      toast.error("Invalid Bankname");
+      setLoading(false);
+      return;
+    }
+    if (bankName === "" && otherCountry === "") {
+      toast.error("Please Specify");
+      setLoading(false);
+      return;
+    }
+    if (accountNumber === "" || accountNumber.length < 10) {
+      toast.error("Invalid account number");
+      setInvalidAccount(true);
+      setLoading(false);
+      return;
+    }
+    if (accountName === "") {
+      toast.error("Input Account Name");
+      setLoading(false);
+      return;
+    }
+    if (amount === "") {
+      toast.error("Input amount");
+      setLoading(false);
+      return;
+    }
+    
+    try {
+      const res = await fetch("http://localhost:3000/api/transfer", {
+        cache: "no-store",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          bankName,
+          accountNumber,
+          accountName,
+          amount,
+          transactionType: 'Withdrawal',
+          status: 'Pending'
+        }),
+      });
+      const data = res.json();
+      if (res.ok) {
+        setLoading(false);
+        router.push("/user/cot");
+        toast.success("Request processing");
+      } else {
+        toast.error("failed. Try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
   const handleDeposit = (e) => {
-    e.preventDefault()
-    setLoading(true)
-     if (wAccountNumber === "" ) {
-       toast.error("Specify the amount");
-       setLoading(false);
-       return;
-     }
-     if (method === "") {
-       toast.error("Please specify the method");
-       setLoading(false);
-       return;
-     }
-     if (wemail === "") {
-       toast.error("invalid email");
-       setLoading(false);
-       return;
+    e.preventDefault();
+    setLoading(true);
+    if (wAccountNumber === "") {
+      toast.error("Specify the amount");
+      setLoading(false);
+      return;
+    }
+    if (method === "") {
+      toast.error("Please specify the method");
+      setLoading(false);
+      return;
+    }
+    if (wemail === "") {
+      toast.error("invalid email");
+      setLoading(false);
+      return;
     }
     setLoading(false);
-    setModal(true)
-    
-  }
-
- 
+    setModal(true);
+  };
 
   return (
     <div>
@@ -123,6 +207,10 @@ export function TabsDemo() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="name">Email Address</Label>
+                <Input id="name" onChange={(e) => setEmail(e.target.value)} />
+              </div>{" "}
               <div className="flex flex-col gap-3">
                 <label htmlFor="">
                   Select Bank <b className="text-red-700">*</b>
@@ -148,9 +236,10 @@ export function TabsDemo() {
                 )}
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Account Number</Label>
+                <Label htmlFor="number">Account Number</Label>
                 <Input
-                  id="username"
+                  id="number"
+                  type="number"
                   onChange={(e) => setAccountNumber(e.target.value)}
                   style={{
                     border: invalidAccount === true ? "2px solid red" : "",
@@ -165,7 +254,7 @@ export function TabsDemo() {
                 />
               </div>{" "}
               <div className="space-y-1">
-                <Label htmlFor="username">Amount</Label>
+                <Label htmlFor="username">Amount ($)</Label>
                 <Input
                   onChange={(e) => setAmount(e.target.value)}
                   id="amount"
@@ -192,6 +281,14 @@ export function TabsDemo() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  
+                />
+              </div>{" "}
               <div className="flex flex-col gap-3">
                 <label htmlFor="">
                   Select Bank to withdraw to <b className="text-red-700">*</b>
@@ -243,9 +340,9 @@ export function TabsDemo() {
             </CardContent>
             <CardFooter>
               {!loading ? (
-                <Button onClick={handleCot}>Submit</Button>
+                <Button onClick={withdraw}>Submit</Button>
               ) : (
-                <Button disabled onClick={handleCot}>
+                <Button disabled>
                   <Spin />
                 </Button>
               )}
