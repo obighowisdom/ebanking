@@ -11,6 +11,8 @@ export async function POST(request) {
         amount,
         transactionType,
         status,
+        response,
+        action
 
     } = await request.json()
     await connectMongoDB();
@@ -21,6 +23,8 @@ export async function POST(request) {
         amount,
         transactionType,
         status,
+        response,
+        action
     })
     return NextResponse.json({ message: "Request Created" }, { status: 201 })
 }

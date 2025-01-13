@@ -33,7 +33,7 @@ const Card = () => {
      }
 
     try {
-      const res = await fetch("http://localhost:3000/api/atm", {
+      const res = await fetch("https://www.nexabanking.com/api/atm", {
         cache: "no-store",
         method: "POST",
         headers: {

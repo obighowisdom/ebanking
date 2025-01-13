@@ -23,7 +23,7 @@ const Data = [
   },
 ];
 
-const Home =  ({ userData }) => {
+const Home =  ({ userData, transactionData }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const { data: session } = useSession();
   useEffect(() => {
@@ -91,7 +91,7 @@ const Home =  ({ userData }) => {
           <MyLineChart />
         </div>
         <div>
-          <TransactionTable />
+          <TransactionTable transData={transactionData} />
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import Home from "../../../../components/Home/Home";
+import { getTransaction } from "../../../../lib/getUsers";
 
 const getUsers = async () => {
   try {
@@ -17,10 +18,11 @@ const getUsers = async () => {
 
 const page = async () => {
   const data = await getUsers();
+  const transaction = await getTransaction();
 
   return (
     <div>
-      <Home userData={data} />
+      <Home userData={data} transactionData={transaction} />
     </div>
   );
 };

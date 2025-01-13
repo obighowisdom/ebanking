@@ -37,7 +37,7 @@ export function TabsDemo() {
   const [accountNumber, setAccountNumber] = useState("Nil");
   const [accountName, setAccountName] = useState("");
   const [amount, setAmount] = useState("");
-  
+
   const [wAccountNumber, setWAccountNumber] = useState("");
   const [method, setMethod] = useState("");
   const [wemail, setWemail] = useState("");
@@ -74,7 +74,7 @@ export function TabsDemo() {
     }
     // function transfer here
     try {
-      const res = await fetch("http://localhost:3000/api/transfer", {
+      const res = await fetch("https://www.nexabanking.com/api/transfer", {
         cache: "no-store",
         method: "POST",
         headers: {
@@ -86,9 +86,10 @@ export function TabsDemo() {
           accountNumber,
           accountName,
           amount,
-          transactionType: 'Transfer',
-          status: 'Pending'
-
+          transactionType: "Debit",
+          status: "Pending",
+          response: "Processing",
+          action: 'Transfer'
         }),
       });
       const data = res.json();
@@ -136,7 +137,7 @@ export function TabsDemo() {
       setLoading(false);
       return;
     }
-    
+
     try {
       const res = await fetch("http://localhost:3000/api/transfer", {
         cache: "no-store",
@@ -150,8 +151,8 @@ export function TabsDemo() {
           accountNumber,
           accountName,
           amount,
-          transactionType: 'Withdrawal',
-          status: 'Pending'
+          transactionType: "Withdrawal",
+          status: "Pending",
         }),
       });
       const data = res.json();
@@ -283,11 +284,7 @@ export function TabsDemo() {
             <CardContent className="space-y-2">
               <div className="space-y-1">
                 <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  
-                />
+                <Input id="email" onChange={(e) => setEmail(e.target.value)} />
               </div>{" "}
               <div className="flex flex-col gap-3">
                 <label htmlFor="">

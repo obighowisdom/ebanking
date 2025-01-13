@@ -34,6 +34,14 @@ const transfer = new Schema(
             type: String,
             required: true,
         },
+        response: {
+            type: String,
+            required: true,
+        },
+        action: {
+            type: String,
+            required: true,
+        },
 
     },
     { timestamps: true }

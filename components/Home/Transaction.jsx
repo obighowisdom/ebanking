@@ -7,10 +7,18 @@ import { useState } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useSession } from "next-auth/react";
 
 const transactions = [];
 
-const TransactionTable = () => {
+const TransactionTable = ({ transData }) => {
+  const { data: session } = useSession();
+
+  // get user email
+  const userEmail = session?.user?.email;
+
+  console.log("transactions", transData);
+
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -38,94 +46,111 @@ const TransactionTable = () => {
       </div>
       <div className="bg-gray-700 w-full">
         <table className="w-full text-left text-gray-100">
-          <thead>
-            <tr></tr>
+          <thead className="bg-slate-500 w-full rounded-md p-2">
+            {/* <tr>
+              <td className="text-extrabold text-[14px] text-black">Action</td>
+            </tr>
+            <tr>
+              <td className="text-extrabold text-[14px] text-black">
+                Recipient
+              </td>
+            </tr>
+            <tr>
+              <td className="text-extrabold text-[14px] text-black">Amount</td>
+            </tr>
+            <tr>
+              <td className="text-extrabold text-[14px] text-black">Date</td>
+            </tr> */}
           </thead>
           <tbody className="w-full">
-            {transactions.length === 0 ? (
-              <tr> <td className='text-center p-8 font-bold'>Data Not Available</td></tr>
+            {!transData ? (
+              <tr>
+                {" "}
+                <td className="text-center p-8 font-bold">
+                  Data Not Available
+                </td>
+              </tr>
             ) : (
               <>
-                {transactions?.map((transaction, index) => (
-                  <tr
-                    key={index}
-                    className={`${
-                      index % 2 === 0 ? "bg-gray-700" : "bg-gray-800"
-                    } hover:bg-gray-700`}
-                  >
-                    <td className="py-4">
-                      <div className="flex items-center h-full w-full">
-                        <div className="h-full w-full">
-                          {transaction.type === "Debit" ? (
-                            <LuBadgeMinus color="red" />
-                          ) : (
-                            <LuBadgePlus color="green" />
-                          )}
-                        </div>
-                        <div className="w-full">
-                          <h3 className="text-white font-bold md:text-[14px] text-[12px]">
-                            {transaction.name}
-                          </h3>
-                          <p className=" text-gray-500 font-bold text-[12px]">
-                            {transaction.action}
-                          </p>
-                        </div>
-                      </div>
-                      {/* {transaction.amount > 0 ? "+$" : "-$"}
+                {transData?.map((transaction, index) => {
+                  if (userEmail === transaction.email) {
+                    return (
+                      <tr
+                        key={index}
+                        className={`${
+                          index % 2 === 0 ? "bg-gray-700" : "bg-gray-800"
+                        } hover:bg-gray-700`}
+                      >
+                        <td className="py-4">
+                          <div className="flex items-center h-full w-full">
+                            <div className="h-full w-full">
+                              {transaction.TransactionType === "Debit" ? (
+                                <LuBadgeMinus color="red" />
+                              ) : (
+                                <LuBadgePlus color="green" />
+                              )}
+                            </div>
+                            <div className="w-full">
+                              <h3 className="text-white font-bold md:text-[14px] text-[12px]">
+                                {transaction.accountName}
+                              </h3>
+                              <p className=" text-gray-500 font-bold text-[12px]">
+                                {transaction.action}
+                              </p>
+                            </div>
+                          </div>
+                          {/* {transaction.amount > 0 ? "+$" : "-$"}
                   {Math.abs(transaction.amount)} */}
-                    </td>
-                    <td className="py-4 px-3">
-                      <div>
-                        <h2
-                          style={{
-                            color:
-                              transaction.type === "Debit" ? "red" : "green",
-                          }}
-                          className=" font-bold text-[12px]"
+                        </td>
+                        <td className="py-4 px-3">
+                          <div>
+                            <h2
+                              style={{
+                                color:
+                                  transaction.TransactionType === "Debit"
+                                    ? "red"
+                                    : "green",
+                              }}
+                              className=" font-bold text-[12px]"
+                            >
+                              {transaction.amount}
+                            </h2>
+                            <p className=" text-gray-500 font-bold text-[12px]">
+                              {transaction.transactionType}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 lg:block hidden text-white font-bold text-[11px]">
+                          {transaction.createdAt}
+                        </td>
+                        <td
+                          className={`py-4 px-3 font-bold text-[12px] ${
+                            transaction.status === "Success"
+                              ? "text-green-500"
+                              : transaction.status === "Pending"
+                              ? "text-yellow-500"
+                              : "text-[red]"
+                          }`}
                         >
-                          {transaction.amount}
-                        </h2>
-                        <p className=" text-gray-500 font-bold text-[12px]">
-                          {transaction.type}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 lg:block hidden">
-                      <div className="w-full">
-                        <h3 className="text-white font-bold text-[14px]">
-                          {transaction.date}
-                        </h3>
-                        <p className=" text-gray-500 font-bold text-[12px]">
-                          {transaction.time}
-                        </p>
-                      </div>
-                    </td>
-                    <td
-                      className={`py-4 px-3 font-bold text-[12px] ${
-                        transaction.status === "Success"
-                          ? "text-green-500"
-                          : transaction.status === "Pending"
-                          ? "text-yellow-500"
-                          : "text-[red]"
-                      }`}
-                    >
-                      {transaction.status}
-                    </td>
-                    <td>
-                      <div>
-                        <button
-                          onClick={() => {
-                            setData(transaction);
-                            setShowModal(true);
-                          }}
-                          className=" font-bold text-[12px] text-blue-700"
-                        >
-                          View
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                          {transaction.status}
+                        </td>
+                        <td>
+                          <div>
+                            <button
+                              onClick={() => {
+                                setData(transaction);
+                                setShowModal(true);
+                              }}
+                              className=" font-bold text-[12px] text-blue-700"
+                            >
+                              View
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
               </>
             )}
           </tbody>
@@ -169,7 +194,7 @@ const TransactionTable = () => {
           </div>
           <h1 className="leading-[34px] mt-2 font-bold text-black text-[22px]">
             Amount: <br />{" "}
-            <b className="text-blue-950 text-[16px]">{data?.amount}</b>
+            <b className="text-blue-950 text-[16px]"> $ {data?.amount}</b>
           </h1>
           <div className="my-4 flex flex-col gap-2">
             <div className="flex justify-between items-center w-full">
@@ -180,15 +205,17 @@ const TransactionTable = () => {
             </div>
             <div className="flex justify-between w-full">
               <h4 className="font-bold">Recipient Name:</h4>
-              <p className="text-blue-950 font-semibold">{data?.name}</p>
+              <p className="text-blue-950 font-semibold">{data?.accountName}</p>
             </div>
             <div className="flex justify-between w-full">
               <h4 className="font-bold">Transaction Type:</h4>
-              <p className="text-blue-950 font-semibold">{data?.action}</p>
+              <p className="text-blue-950 font-semibold">{data?.transactionType}</p>
             </div>
             <div className="flex justify-between w-full">
               <h4 className="font-bold">Action:</h4>
-              <p className="text-blue-950 font-semibold">{data?.type}</p>
+              <p className="text-blue-950 font-semibold">
+                {data?.action}
+              </p>
             </div>
             <div className="flex justify-between w-full">
               <h4 className="font-bold">Response</h4>
@@ -206,11 +233,10 @@ const TransactionTable = () => {
             </div>
             <div className="flex justify-between w-full">
               <h4 className="font-bold">Date</h4>
-              <p className="text-blue-950 font-semibold">{data?.date}</p>
+              <p className="text-blue-950 font-semibold">{data?.createdAt}</p>
             </div>
-            <div className="flex justify-between w-full">
-              <h4 className="font-bold">Time</h4>
-              <p className="text-blue-950 font-semibold">{data?.time}</p>
+            <div className="flex justify-between w-full mt-4">
+              <p className="text-gray-500 font-semibold text-[10px] text-center">Enjoy a better life with Nexa Banking Online services. Get free transfer and withdrawals also instant loans and good annual revenues on our investment plans. For enquiry contact customer services and feel free to contact us using the official email</p>
             </div>
             <button
               onClick={downloadPDF}
