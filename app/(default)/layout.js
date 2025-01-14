@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "../globals.css";
 import Header from "../../components/HomePage/Header";
 import TopNav from "../../components/HomePage/TopNav";
+import Widget from "../../components/LiveChat";
 
 
 const geistSans = localFont({
@@ -29,12 +30,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        
+
         <TopNav />
         <Header />
-          {children}
-          
+        {children}
+
       </body>
+     <Widget />
     </html>
   );
 }
