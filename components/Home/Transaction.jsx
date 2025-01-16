@@ -17,7 +17,7 @@ const TransactionTable = ({ transData }) => {
   // get user email
   const userEmail = session?.user?.email;
 
-  console.log("transactions", transData);
+
 
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -120,7 +120,7 @@ const TransactionTable = ({ transData }) => {
                             </p>
                           </div>
                         </td>
-                        <td className="py-4 px-6 lg:block hidden text-white font-bold text-[11px]">
+                        <td className="md:flex items-center py-6 lg:block hidden text-white font-bold text-[11px]">
                           {transaction.createdAt}
                         </td>
                         <td

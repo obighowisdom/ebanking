@@ -38,7 +38,7 @@ export function TabsDemo() {
   const [accountName, setAccountName] = useState("");
   const [amount, setAmount] = useState("");
 
-  const [wAccountNumber, setWAccountNumber] = useState("");
+  const [wAmount, setWAmount] = useState("");
   const [method, setMethod] = useState("");
   const [wemail, setWemail] = useState("");
 
@@ -107,72 +107,76 @@ export function TabsDemo() {
   };
 
   // withdraw function
-  const withdraw = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+ const withdraw = async (e) => {
+   e.preventDefault();
+   setLoading(true);
 
-    if (bankName === "") {
-      toast.error("Invalid Bankname");
-      setLoading(false);
-      return;
-    }
-    if (bankName === "" && otherCountry === "") {
-      toast.error("Please Specify");
-      setLoading(false);
-      return;
-    }
-    if (accountNumber === "" || accountNumber.length < 10) {
-      toast.error("Invalid account number");
-      setInvalidAccount(true);
-      setLoading(false);
-      return;
-    }
-    if (accountName === "") {
-      toast.error("Input Account Name");
-      setLoading(false);
-      return;
-    }
-    if (amount === "") {
-      toast.error("Input amount");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const res = await fetch("http://localhost:3000/api/transfer", {
-        cache: "no-store",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          bankName,
-          accountNumber,
-          accountName,
-          amount,
-          transactionType: "Withdrawal",
-          status: "Pending",
-        }),
-      });
-      const data = res.json();
-      if (res.ok) {
-        setLoading(false);
-        router.push("/user/cot");
-        toast.success("Request processing");
-      } else {
-        toast.error("failed. Try again");
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log("Error: ", error);
-    }
+   if (bankName === "") {
+     toast.error("Invalid Bankname");
+     setLoading(false);
+     return;
+   }
+   if (bankName === "" && otherCountry === "") {
+     toast.error("Please Specify");
+     setLoading(false);
+     return;
+   }
+   if (accountNumber === "" || accountNumber.length < 10) {
+     toast.error("Invalid account number");
+     setInvalidAccount(true);
+     setLoading(false);
+     return;
+   }
+   if (accountName === "") {
+     toast.error("Input Account Name");
+     setLoading(false);
+     return;
+   }
+   if (amount === "") {
+     toast.error("Input amount");
+     setLoading(false);
+     return;
+   }
+   // function transfer here
+   try {
+     const res = await fetch("https://www.nexabanking.com/api/transfer", {
+       cache: "no-store",
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({
+         email,
+         bankName,
+         accountNumber,
+         accountName,
+         amount,
+         transactionType: "Debit",
+         status: "Pending",
+         response: "Processing",
+         action: "Withdraw",
+       }),
+     });
+     const data = res.json();
+     if (res.ok) {
+       setLoading(false);
+       router.push("/user/cot");
+       toast.success("Request processing");
+     } else {
+       toast.error("failed. Try again");
+       setLoading(false);
+     }
+   } catch (error) {
+     console.log("Error: ", error);
+   }
   };
+  
+  // deposit
 
-  const handleDeposit = (e) => {
+  const handleDeposit = async(e) => {
     e.preventDefault();
     setLoading(true);
-    if (wAccountNumber === "") {
+    if (wAmount === "") {
       toast.error("Specify the amount");
       setLoading(false);
       return;
@@ -186,6 +190,32 @@ export function TabsDemo() {
       toast.error("invalid email");
       setLoading(false);
       return;
+    }
+     try {
+      const res = await fetch("https://www.nexabanking.com/api/deposit", {
+        cache: "no-store",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wAmount,
+          method,
+          email,
+          
+        }),
+      });
+      const data = res.json();
+      if (res.ok) {
+        setLoading(false);
+        router.push("/user/home");
+        toast.success("Request processing");
+      } else {
+        toast.error("failed. Try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
     }
     setLoading(false);
     setModal(true);
@@ -356,7 +386,7 @@ export function TabsDemo() {
               <div className="space-y-1">
                 <Label htmlFor="current">Set Amount ($)</Label>
                 <Input
-                  onChange={(e) => setWAccountNumber(e.target.value)}
+                  onChange={(e) => setWAmount(e.target.value)}
                   id="current"
                   type="number"
                   required
