@@ -5,7 +5,7 @@ import UserTable from "./Table/UserTable";
 
 const getUsers = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/user", {
+    const res = await fetch("http://www.nexabanking.com/api/user", {
       cache: "no-store",
     });
     if (!res.ok) {

@@ -7,6 +7,7 @@ import Adds from "./Adds";
 import MyLineChart from "./Chart";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Data = [
   {
@@ -23,9 +24,10 @@ const Data = [
   },
 ];
 
-const Home =  ({ userData, transactionData }) => {
+const Home = ({ userData, transactionData }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const { data: session } = useSession();
+  const router = useRouter();
   useEffect(() => {
     const currentUser = userData?.find(
       (item) => item.email === session?.user?.email
@@ -33,6 +35,16 @@ const Home =  ({ userData, transactionData }) => {
 
     setCurrentUser(currentUser); // Set the matched user in the state
   }, [userData, session]);
+
+  // useEffect(() => {
+  //   const activeUser = session?.user?.email;
+  //   if (!activeUser) {
+  //     router.push("https://www.nexabanking.com/auth/login");
+  //   }
+
+  //   // Set the matched user in the state
+  // }, [session]);
+
   return (
     <div className="flex w-full flex-col lg:flex-row justify-between h-full gap-4">
       <div className="lg:w-[54%] w-full">
@@ -79,7 +91,7 @@ const Home =  ({ userData, transactionData }) => {
                 </Link>
               </div>
               <h2 className="leading-5 text-[20px] font-extrabold text-white mt-3">
-               ${currentUser.loan}.00
+                ${currentUser.loan}.00
               </h2>
             </div>
           </div>
