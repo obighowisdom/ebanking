@@ -113,7 +113,7 @@ const Loans = () => {
               <p className="text-sm font-medium text-blue-950">
                 {" "}
                 The rate is subject to change and the representative APR may not
-                be the rate you'll receive. We'll offer you a rate based on our
+                be the rate you will receive. We will offer you a rate based on our
                 assessment of your personal financial circumstances. The maximum
                 APR you could be offered is 21.9%.
               </p>
