@@ -1,8 +1,7 @@
 // middleware.ts (or middleware.js)
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { getUsers } from './lib/getUsers'
-import { getSession } from "next-auth/react"
+
 
 export async function middleware(req) {
    
