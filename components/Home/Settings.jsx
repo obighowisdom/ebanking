@@ -7,6 +7,7 @@ import { Spin } from "antd";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import ProfileImage from "./ProfileImage";
+import { useRouter } from "next/navigation";
 
 export default function Settings({ userData }) {
   const [currentUser, setCurrentUser] = useState(null);
@@ -15,11 +16,75 @@ export default function Settings({ userData }) {
   const [cardFront, setCardFront] = useState(null);
   const [cardBack, setCardBack] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
-  const [ID, setID] = useState("");
-  const [otherID, setOtherID] = useState("");
+   const [otherID, setOtherID] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
+
+  const [cardType, setCardType] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [issueDate, setIssueDate] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+
+  const router = useRouter();
+
+  const userEmail = session?.user?.email;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (cardType === "") {
+      toast.error("Invalid Card Type");
+      setLoading(false);
+      return;
+    }
+    if (cardNumber === "") {
+      toast.error("Enter a valid card number");
+      setLoading(false);
+      return;
+    }
+    if (issueDate === "") {
+      toast.error("issue date required");
+      setLoading(false);
+      return;
+    }
+    if (expiryDate === "") {
+      toast.error("expiry date required");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch("https://www.nexabanking.com/api/kyc", {
+        cache: "no-store",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cardType,
+          otherID,
+          cardNumber,
+          issueDate,
+          expiryDate,
+          email: userEmail,
+          status: "pending",
+        }),
+      });
+      const data = res.json();
+      if (res.ok) {
+        setLoading(false);
+        router.push("/user/home");
+        toast.success("Request Sent, you will be contacted through email");
+      } else {
+        toast.error("failed. Try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
   useEffect(() => {
     // Assuming userData and session are available in your component
@@ -30,7 +95,6 @@ export default function Settings({ userData }) {
 
     setCurrentUser(currentUser); // Set the matched user in the state
   }, [userData, session]);
-
 
   // const handleUpload = async () => {
   //   if (!image) return;
@@ -243,7 +307,7 @@ export default function Settings({ userData }) {
             </div>
           ) : (
             <div className="w-full h-screen flex items-center justify-center">
-              <Spin />
+              <Spin /> <b className="ml-3">fetching profile...</b>
             </div>
           )}
 
@@ -255,25 +319,25 @@ export default function Settings({ userData }) {
             <div className="flex md:flex-row flex-col w-full gap-4">
               <div className="flex flex-col w-full">
                 <label
-                  htmlFor=""
+                  htmlFor="card"
                   className="block text-sm leading-[32px] font-semibold text-blue-950"
                 >
                   Identity Card <b className="text-red-700">*</b>
                 </label>
                 <select
-                  id="invest"
-                  onChange={(e) => setID(e.target.value)}
+                  id="card"
+                  onChange={(e) => setCardType(e.target.value)}
                   className="py-3 px-4 border rounded shadow-md"
                 >
                   <option value="">-------</option>
                   <option value="drivers license">Drivers License</option>
                   <option value="others">Others</option>
                 </select>
-                {ID === "others" && (
+                {cardType === "others" && (
                   <input
                     type="text"
                     placeholder="please specify"
-                    className="outline-none border-b py-2 my-4"
+                    className="outline-none border-b border-b-red-900 py-2 my-4"
                     onChange={(e) => setOtherID(e.target.value)}
                   />
                 )}
@@ -284,6 +348,7 @@ export default function Settings({ userData }) {
                 </label>
                 <input
                   type="text"
+                  onChange={(e) => setCardNumber(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder=""
                 />
@@ -296,6 +361,7 @@ export default function Settings({ userData }) {
                 </label>
                 <input
                   type="date"
+                  onChange={(e) => setIssueDate(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder=""
                 />
@@ -306,19 +372,17 @@ export default function Settings({ userData }) {
                 </label>
                 <input
                   type="date"
+                  onChange={(e) => setExpiryDate(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder=""
                 />
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between gap-6">
-              {/* Upload card front */}
+            {/* <div className="flex flex-col md:flex-row justify-between gap-6">
+             
               <div className="flex flex-col gap-4 w-full">
-                {/* <h1 className="text-sm font-semibold text-center mb-6">
-                Upload Profile Image
-              </h1> */}
-                {/* Image Preview */}
+               
                 {cardFront ? (
                   <div className="mt-4">
                     <img
@@ -329,15 +393,11 @@ export default function Settings({ userData }) {
                   </div>
                 ) : (
                   <div className="mt-4">
-                    {/* <img
-                      src="/images/photo.jpg"
-                      alt="Preview"
-                      className="w-full h-10 object-contain rounded-md border border-blue-500"
-                    /> */}
+                    
                   </div>
                 )}
 
-                {/* Custom File Input with Upload Icon */}
+               
                 <label
                   htmlFor="front-upload"
                   className="flex items-center cursor-pointer transition duration-200 bg-gray-300 p-4 rounded-xl"
@@ -348,7 +408,7 @@ export default function Settings({ userData }) {
                   </span>
                 </label>
 
-                {/* File Input */}
+                #
                 <input
                   id="front-upload"
                   type="file"
@@ -357,13 +417,10 @@ export default function Settings({ userData }) {
                   onChange={handlefront}
                 />
               </div>
-              {/* Upload Card back */}
+              
 
               <div className="flex flex-col gap-4 w-full">
-                {/* <h1 className="text-sm font-semibold text-center mb-6">
-                Upload Profile Image
-              </h1> */}
-                {/* Image Preview */}
+                
                 {cardBack ? (
                   <div className="mt-4">
                     <img
@@ -374,15 +431,11 @@ export default function Settings({ userData }) {
                   </div>
                 ) : (
                   <div className="mt-4">
-                    {/* <img
-                      src="/images/photo.jpg"
-                      alt="Preview"
-                      className="w-full h-40 object-contain rounded-md border border-blue-500"
-                    /> */}
+                    
                   </div>
                 )}
 
-                {/* Custom File Input with Upload Icon */}
+                
                 <label
                   htmlFor="back-upload"
                   className="flex items-center cursor-pointer transition duration-200 bg-gray-300 p-4 rounded-xl"
@@ -393,7 +446,6 @@ export default function Settings({ userData }) {
                   </span>
                 </label>
 
-                {/* File Input */}
                 <input
                   id="back-upload"
                   type="file"
@@ -402,14 +454,18 @@ export default function Settings({ userData }) {
                   onChange={handleBack}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Request Button */}
         <div className="mt-6">
-          <button className="bg-blue-950 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
-            Request
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="bg-blue-950 text-white px-6 py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          >
+            {loading === true ? <Spin /> : <>Request </>}
           </button>
         </div>
       </div>

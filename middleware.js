@@ -2,17 +2,10 @@
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { getUsers } from './lib/getUsers'
+import { getSession } from "next-auth/react"
 
 export async function middleware(req) {
-    const data = await getUsers();
-
-    const admin = data.map((item) => {
-        return item.role
-    })
-
-    if (req.url.includes("/admin") && !admin.includes('admin')) {
-        return NextResponse.redirect("https://www.nexabanking.com/auth/login");
-    }
+   
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
     // Check if the route starts with "/user" and the user is not authenticated
@@ -20,10 +13,13 @@ export async function middleware(req) {
         // Redirect unauthenticated users to the login page
         return NextResponse.redirect("https://www.nexabanking.com/auth/login");
     }
-
-
+    if (token?.email !== 'nexabanking@gmail.com') {
+        return new NextResponse('Unauthorized', { status: 403 });
+    }
     // Allow the request to proceed for authenticated users
     return NextResponse.next();
+
+    
 }
 
 export const config = {

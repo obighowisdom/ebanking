@@ -7,6 +7,50 @@ import { IoMdCloseCircle } from "react-icons/io";
 
 const TransactionTable = ({ data }) => {
   const [modal, setModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [transactionType, setTransactionType] = useState("");
+  const [status, setStatus] = useState("");
+  const [response, setResponse] = useState("");
+  const [action, setAction] = useState("");
+
+  const handleSubmit = async (e) => {
+    try {
+      const res = await fetch("https://www.nexabanking.com/api/transfer", {
+        cache: "no-store",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          bankName,
+          accountNumber,
+          accountName,
+          amount,
+          transactionType: "Debit",
+          status: "Success",
+          response: "Processed",
+          action: "Transfer",
+        }),
+      });
+      const data = res.json();
+      if (res.ok) {
+        setLoading(false);
+        router.push("/user/cot");
+        toast.success("Request processing");
+      } else {
+        toast.error("failed. Try again");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   return (
     <div className="flex flex-col w-full bg-white px-10 rounded-lg">
       <div className="flex w-full md:flex-row flex-col items-center justify-end md:gap-6 gap-1 my-2">
@@ -210,7 +254,7 @@ const TransactionTable = ({ data }) => {
                     id="country"
                   />
                 </div>
-                
+
                 <div className="flex flex-col gap-2 w-full">
                   <label className="font-bold" htmlFor="city">
                     Date:
@@ -233,7 +277,6 @@ const TransactionTable = ({ data }) => {
                 </div>
               </div>
 
-            
               {/* last row */}
               <div className="w-full flex gap-4 lg:flex-row flex-col ">
                 <div className="flex flex-col gap-2 w-full">

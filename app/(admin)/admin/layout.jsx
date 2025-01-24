@@ -21,6 +21,7 @@ const geistMono = localFont({
 
 export default function RootLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   return (
     <html lang="en">
       <body

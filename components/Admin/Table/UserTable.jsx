@@ -23,7 +23,7 @@ const UserTable = ({ data }) => {
   const [status, setStatus] = useState("");
 
   const userId = userData?._id;
-  const router = useRouter()
+  const router = useRouter();
 
   // generate account number
   const generateAccountNumber = (e) => {
@@ -61,18 +61,19 @@ const UserTable = ({ data }) => {
           }),
         }
       );
-      console.log('res', res)
+      toast.success("User Updated");
+      router.refresh();
+      router.push("/admin/home");
+
       if (res.status === 200) {
         toast.success("User Updated");
-        router.refresh()
+        router.refresh();
         router.push("/admin/home");
         setLoading(false);
       } else {
         toast.error("failed. Try again");
         setLoading(false);
       }
-
-      
     } catch (error) {
       console.log(error);
     }
