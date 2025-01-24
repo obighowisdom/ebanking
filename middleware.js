@@ -12,7 +12,7 @@ export async function middleware(req) {
         // Redirect unauthenticated users to the login page
         return NextResponse.redirect("https://www.nexabanking.com/auth/login");
     }
-    if (token?.email !== 'nexabanking@gmail.com') {
+    if (req.url.includes("/admin") && token?.email !== 'nexabanking@gmail.com') {
         return new NextResponse('Unauthorized', { status: 403 });
     }
     // Allow the request to proceed for authenticated users
