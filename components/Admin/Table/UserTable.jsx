@@ -61,10 +61,7 @@ const UserTable = ({ data }) => {
           }),
         }
       );
-      toast.success("User Updated");
-      router.refresh();
-      router.push("/admin/home");
-
+      
       if (res.status === 200) {
         toast.success("User Updated");
         router.refresh();

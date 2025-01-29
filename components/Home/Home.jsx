@@ -9,20 +9,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const Data = [
-  {
-    name: "Total Balance",
-    amount: "",
-  },
-  {
-    name: "Loan",
-    amount: "",
-  },
-  {
-    name: "Uncleared",
-    amount: "",
-  },
-];
+
 
 const Home = ({ userData, transactionData }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -36,6 +23,7 @@ const Home = ({ userData, transactionData }) => {
     setCurrentUser(currentUser); // Set the matched user in the state
   }, [userData, session]);
 
+    console.log('currentuser', currentUser)
   // useEffect(() => {
   //   const activeUser = session?.user?.email;
   //   if (!activeUser) {
