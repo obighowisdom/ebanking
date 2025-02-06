@@ -1,6 +1,6 @@
 import React from "react";
 import UserTable from "./Table/UserTable";
-import { getUsers } from "@/lib/getUsers";
+import { getUsers } from "../../lib/getUsers";
 
 
 
