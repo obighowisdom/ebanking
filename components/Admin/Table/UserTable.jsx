@@ -2,7 +2,7 @@
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Button } from "../../ui/button";
 import { FiSearch } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import { toast } from "react-toastify";
 import { Spin } from "antd";
@@ -13,6 +13,7 @@ const UserTable = ({ data }) => {
   const [userData, setUserData] = useState(null);
   const [accountNumber, setAccountNumber] = useState("");
   const [loading, setLoading] = useState(false);
+  const [info, setInfo]= useState(null)
 
   // updateuser data
   const [role, setRole] = useState("");
@@ -24,6 +25,14 @@ const UserTable = ({ data }) => {
 
   const userId = userData?._id;
   const router = useRouter();
+
+  useEffect(() => {
+    if(data){
+      setInfo(data)
+    }
+  
+  }, [data, info])
+  
 
   // generate account number
   const generateAccountNumber = (e) => {
@@ -161,7 +170,7 @@ const UserTable = ({ data }) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {data?.map((row, index) => (
+                {info?.map((row, index) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{index + 1}</div>
