@@ -11,15 +11,14 @@ export const getUsers = async () => {
     if (!res.ok) {
       throw new Error("Failed to get clients");
     }
-    const data = await res.json();
-    return data.users;
+    return res.json()
   } catch (error) {
     console.log("Error loading clients: ", error);
   }
 };
 
 const UserDetails = async() => {
-    const  data  = await getUsers();
+    const  {users}  = await getUsers();
 
   return (
     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -80,7 +79,7 @@ const UserDetails = async() => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {data?.map((row, index) => (
+                    {users?.map((row, index) => (
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">{index + 1}</div>
@@ -139,7 +138,7 @@ const UserDetails = async() => {
                     ))}
                   </tbody>
                 </table>
-                {!data && (
+                {!users && (
                   <p className="text-center leading-6 text-[16px] font-normal text-gray-500 mt-7 mb-7">
                     No Data{" "}
                   </p>
