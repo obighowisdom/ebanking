@@ -6,7 +6,7 @@ import { FaTrash } from 'react-icons/fa6';
 export const getUsers = async () => {
   try {
     const res = await fetch("https://www.nexabanking.com/api/user", {
-      cache: "no-store",
+      headers: { "Cache-Control": "no-store" },
     });
 
     // If the response is not OK, throw an error

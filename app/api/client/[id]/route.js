@@ -7,3 +7,4 @@ export async function GET(request, { params }) {
     const user = await User.findOne({ _id: id })
     return NextResponse.json({ user }, { status: 200 })
 }
+
