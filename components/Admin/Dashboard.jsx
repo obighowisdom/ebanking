@@ -1,8 +1,7 @@
 import React from "react";
 import UserTable from "./Table/UserTable";
 import { getUsers } from "../../lib/getUsers";
-
-
+import UserDetails from "./Table/UserDetails";
 
 //
 //   try {
@@ -52,13 +51,13 @@ import { getUsers } from "../../lib/getUsers";
 
 const Dashboard = async () => {
   const data = await getUsers();
-  
-     
+
   return (
     <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
       {/* Charts and Tables Section */}
-      <UserTable data={data} />
+      {/* <UserTable data={data} /> */}
+      <UserDetails />
     </div>
   );
 };

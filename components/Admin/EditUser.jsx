@@ -1,33 +1,48 @@
 "use client";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { Button } from "../../ui/button";
+import { Button } from "../ui/button";
 import { FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import { toast } from "react-toastify";
 import { Spin } from "antd";
 import { useRouter } from "next/navigation";
-import UserDetails from './UserDetails'
 
-const UserTable = ({ data }) => {
+
+
+
+const EditUser = ({
+  id,
+  role,
+  totalAmount,
+  uncleared,
+  accountNumber,
+  accountType,
+  loan,
+  status,
+  name,
+  city,
+  phone,
+  country,
+  email,
+  state,
+  address,
+}) => {
   const [modal, setModal] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [accountNumber, setAccountNumber] = useState("");
+  const [newAccountNumber, setAccountNumber] = useState(accountNumber);
   const [loading, setLoading] = useState(false);
-  const [info, setInfo]= useState(null)
 
   // updateuser data
-  const [role, setRole] = useState("");
-  const [totalAmount, setTotalAmount] = useState("");
-  const [uncleared, setUncleared] = useState("");
-  const [loan, setLoan] = useState("");
-  const [accountType, setAccountType] = useState("");
-  const [status, setStatus] = useState("");
+  const [newRole, setNewRole] = useState(role);
+  const [newTotalAmount, setNewTotalAmount] = useState(totalAmount);
+  const [newUncleared, setNewUncleared] = useState(uncleared);
+  const [newLoan, setNewLoan] = useState(loan);
+  const [newAccountType, setNewAccountType] = useState(accountType);
+  const [newStatus, setNewStatus] = useState(status);
 
   const userId = userData?._id;
   const router = useRouter();
-
- 
 
   // generate account number
   const generateAccountNumber = (e) => {
@@ -48,27 +63,26 @@ const UserTable = ({ data }) => {
 
     try {
       const res = await fetch(
-        `https://www.nexabanking.com/api/updateUser/${userId}`,
+        `https://www.nexabanking.com/api/updateUser/${id}`,
         {
           method: "PUT",
           headers: {
             "Content-type": "application/json",
           },
           body: JSON.stringify({
-            role,
-            totalAmount,
-            uncleared,
-            accountNumber,
-            accountType,
-            loan,
-            status,
+            newRole,
+            newTotalAmount,
+            newUncleared,
+            newAccountNumber,
+            newAccountType,
+            newLoan,
+            newStatus,
           }),
         }
       );
-      
+
       if (res.status === 200) {
         toast.success("User Updated");
-        router.refresh();
         router.push("/admin/home");
         setLoading(false);
       } else {
@@ -81,44 +95,12 @@ const UserTable = ({ data }) => {
   };
 
   return (
-    <div className="flex flex-col w-full bg-white px-10 rounded-lg">
-      <div className="flex w-full md:flex-row flex-col items-center justify-end md:gap-6 gap-1 my-2">
-        <Button
-          variant="destructive"
-          className="px-14 py-6 rounded-sm my-6 bg-[#14233C]"
-        >
-          Users
-        </Button>
-        <div className="flex border-red-600 rounded-sm">
-          <div className="border justify-center items-center rounded-md h-fit">
-            <input
-              type="text"
-              placeholder="TRX ID"
-              className="outline-none px-4 h-full w-full leading-4 font-bold text-blue-950 my-4"
-            />
-          </div>
-          <button className="bg-[#14233C] rounded-md">
-            <FiSearch
-              className="h-fit cursor-pointer mx-4"
-              size={30}
-              color="blue"
-            />
-          </button>
-        </div>
-      </div>
-
-      {/* details here */}
-      <UserDetails />
-
-      {/* modal starts  */}
+    <div>
       <div>
-        <div
-          style={{ display: modal ? "" : "none" }}
-          className="absolute bg-[#00000085] w-full h-full z-50 top-0 left-0 bottom-0 flex items-center justify-center lg:pt-0 pt-72"
-        >
+        <div className="absolute bg-[#00000085] w-full h-full z-50 top-0 left-0 bottom-0 flex items-center justify-center lg:pt-0 pt-72">
           <div className="md:w-[1100px]  md:mt-0 w-full mx-4 h-fit top-20 py-4 bg-white rounded-lg shadow-lg px-6 flex flex-col gap-4 items-center">
             <div
-              onClick={() => setModal(false)}
+              onClick={() => router.push('admin/home')}
               className="w-full justify-end cursor-pointer flex"
             >
               <IoMdCloseCircle color="red" size={20} />
@@ -131,7 +113,7 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?.name}
+                    defaultValue={name}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="name"
@@ -143,7 +125,7 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?.email}
+                    defaultValue={email}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="email"
                     id="emal"
@@ -155,7 +137,7 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?.phone}
+                    defaultValue={phone}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="number"
                     id="number"
@@ -170,7 +152,7 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?.country}
+                    defaultValue={country}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="country"
@@ -182,7 +164,7 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?.state}
+                    defaultValue={state}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="state"
@@ -194,7 +176,7 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?.city}
+                    defaultValue={city}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="city"
@@ -209,26 +191,15 @@ const UserTable = ({ data }) => {
                     id="status"
                     className="p-2 border rounded focus:shadow focus:shadow-blue-700"
                     required
-                    onChange={(e) => setRole(e.target.value)}
+                    onChange={(e) => setNewRole(e.target.value)}
                   >
-                    <option value={userData?.role}>{userData?.role}</option>
+                    <option value={role}>{role}</option>
                     <option value="Admin">Admin</option>
                     <option value="User">User</option>
                   </select>
                 </div>
 
-                <div className="flex flex-col gap-2 w-full">
-                  <label className="font-bold" htmlFor="zip">
-                    Zip Code:
-                  </label>
-                  <input
-                    disabled
-                    defaultValue={userData?.zipcode}
-                    className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
-                    type="text"
-                    id="zip"
-                  />
-                </div>
+               
               </div>
 
               {/* address */}
@@ -239,24 +210,13 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?.address}
+                    defaultValue={address}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="address"
                   />
                 </div>
-                <div className="flex flex-col gap-2 w-full">
-                  <label className="font-bold" htmlFor="landmark">
-                    Landmark:
-                  </label>
-                  <input
-                    disabled
-                    defaultValue={userData?.landmark}
-                    className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
-                    type="text"
-                    id="landmark"
-                  />
-                </div>
+                
               </div>
 
               <div className="w-full flex gap-4 lg:flex-row flex-col ">
@@ -265,11 +225,11 @@ const UserTable = ({ data }) => {
                     Total Amount:
                   </label>
                   <input
-                    defaultValue={userData?.totalAmount}
+                    defaultValue={totalAmount}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="address"
-                    onChange={(e) => setTotalAmount(e.target.value)}
+                    onChange={(e) => setNewTotalAmount(e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col gap-2 w-full">
@@ -277,11 +237,11 @@ const UserTable = ({ data }) => {
                     Uncleared:
                   </label>
                   <input
-                    defaultValue={userData?.uncleared}
+                    defaultValue={uncleared}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="landmark"
-                    onChange={(e) => setUncleared(e.target.value)}
+                    onChange={(e) => setNewUncleared(e.target.value)}
                   />
                 </div>
 
@@ -290,11 +250,11 @@ const UserTable = ({ data }) => {
                     Loan:
                   </label>
                   <input
-                    defaultValue={userData?.loan}
+                    defaultValue={loan}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="landmark"
-                    onChange={(e) => setLoan(e.target.value)}
+                    onChange={(e) => setNewLoan(e.target.value)}
                   />
                 </div>
               </div>
@@ -307,7 +267,7 @@ const UserTable = ({ data }) => {
                   </label>
                   <input
                     disabled
-                    defaultValue={userData?._id}
+                    defaultValue={id}
                     className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                     type="text"
                     id="id"
@@ -319,7 +279,7 @@ const UserTable = ({ data }) => {
                       Account Number:
                     </label>
                     <input
-                      defaultValue={accountNumber}
+                      defaultValue={newAccountNumber}
                       disabled
                       className="focus:shadow focus:shadow-blue-700 p-2 rounded outline-none border w-full"
                       type="text"
@@ -329,6 +289,7 @@ const UserTable = ({ data }) => {
                   <button
                     className="bg-gray-300 p-2 w-fit rounded"
                     onClick={generateAccountNumber}
+                    disabled={accountNumber ? true : false}
                   >
                     generate
                   </button>
@@ -342,13 +303,13 @@ const UserTable = ({ data }) => {
                     id="accountType"
                     className="p-2 border rounded focus:shadow focus:shadow-blue-700"
                     required
-                    onChange={(e) => setAccountType(e.target.value)}
+                    onChange={(e) => setNewAccountType(e.target.value)}
                   >
-                    <option value={userData?.accountType}>
-                      {userData?.accountType}
+                    <option value={newAccountType}>
+                      {accountType}
                     </option>
-                    <option value="Approved">Regular</option>
-                    <option value="Not Approved">Premium</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Premium">Premium</option>
                   </select>
                 </div>
 
@@ -360,9 +321,11 @@ const UserTable = ({ data }) => {
                     id="status"
                     className="p-2 border rounded focus:shadow focus:shadow-blue-700"
                     required
-                    onChange={(e) => setStatus(e.target.value)}
+                    onChange={(e) => setNewStatus(e.target.value)}
                   >
-                    <option value={userData?.status}>{userData?.status}</option>
+                    <option value={newStatus}>
+                      {status}
+                    </option>
                     <option value="Approved">Approved</option>
                     <option value="Not Approved">Not Approved</option>
                   </select>
@@ -380,7 +343,7 @@ const UserTable = ({ data }) => {
                 <Button
                   variant="destructive"
                   className="px-14 py-6 rounded-sm my-6 w-full md:w-fit bg-[#9c2d1e]"
-                  onClick={() => setModal(false)}
+                  onClick={() => router.push('/admin/home')}
                 >
                   Cancel
                 </Button>
@@ -393,4 +356,4 @@ const UserTable = ({ data }) => {
   );
 };
 
-export default UserTable;
+export default EditUser;
