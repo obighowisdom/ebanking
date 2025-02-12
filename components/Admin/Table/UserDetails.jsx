@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react'
 import { FaEdit } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa6';
+import { Button } from '../../ui/button';
 
 export const getUsers = async () => {
   try {
@@ -138,12 +139,14 @@ const UserDetails = async() => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap flex gap-4 text-right text-sm font-medium">
-                    <Link
+                    <Button
                       className="text-gray-400"
-                      href={row._id ? `/admin/updateUser/${row._id}` : "#"}
+                      onClick={() =>
+                        router.push(`/admin/updateUser/${row._id}`)
+                      }
                     >
                       <FaEdit />
-                    </Link>
+                    </Button>
                     <a href="#" className="text-gray-400">
                       <FaTrash />
                     </a>
