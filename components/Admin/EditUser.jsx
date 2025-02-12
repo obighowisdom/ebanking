@@ -100,7 +100,7 @@ const EditUser = ({
         <div className="absolute bg-[#00000085] w-full h-full z-50 top-0 left-0 bottom-0 flex items-center justify-center lg:pt-0 pt-72">
           <div className="md:w-[1100px]  md:mt-0 w-full mx-4 h-fit top-20 py-4 bg-white rounded-lg shadow-lg px-6 flex flex-col gap-4 items-center">
             <div
-              onClick={() => router.push('admin/home')}
+              onClick={() => router.push('/admin/home')}
               className="w-full justify-end cursor-pointer flex"
             >
               <IoMdCloseCircle color="red" size={20} />

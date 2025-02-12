@@ -3,7 +3,7 @@ import React from 'react'
 import { FaEdit } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa6';
 
-const getUsers = async () => {
+export const getUsers = async () => {
   try {
     const res = await fetch("https://www.nexabanking.com/api/user", {
       cache: "no-store",
@@ -11,14 +11,15 @@ const getUsers = async () => {
     if (!res.ok) {
       throw new Error("Failed to get clients");
     }
-    return res.json();
+    const data = await res.json();
+    return data.users;
   } catch (error) {
     console.log("Error loading clients: ", error);
   }
 };
 
 const UserDetails = async() => {
-    const { users } = await getUsers();
+    const  data  = await getUsers();
 
   return (
     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -79,7 +80,7 @@ const UserDetails = async() => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {users?.map((row, index) => (
+                    {data?.map((row, index) => (
                       <tr key={index}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">{index + 1}</div>
@@ -138,7 +139,7 @@ const UserDetails = async() => {
                     ))}
                   </tbody>
                 </table>
-                {!users && (
+                {!data && (
                   <p className="text-center leading-6 text-[16px] font-normal text-gray-500 mt-7 mb-7">
                     No Data{" "}
                   </p>
