@@ -8,17 +8,31 @@ export const getUsers = async () => {
     const res = await fetch("https://www.nexabanking.com/api/user", {
       cache: "no-store",
     });
+
+    // If the response is not OK, throw an error
     if (!res.ok) {
       throw new Error("Failed to get clients");
     }
-    return res.json()
+
+    // Parse the JSON response
+    const data = await res.json();
+
+    // Check if the response contains the 'users' property
+    if (!data || !data.users) {
+      throw new Error("No 'users' property found in the response");
+    }
+
+    // Return the users data
+    return data.users;
   } catch (error) {
-    console.log("Error loading clients: ", error);
+    console.error("Error loading clients: ", error);
+    return []; // Return an empty array in case of an error or missing data
   }
 };
 
+
 const UserDetails = async() => {
-    const  {users}  = await getUsers();
+    const users = await getUsers();
 
   return (
     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
